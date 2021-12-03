@@ -849,7 +849,7 @@
 
 "@bpmn-io/extract-process-variables@^0.3.0":
   version "0.3.0"
-  resolved "https://registry.nlark.com/@bpmn-io/extract-process-variables/download/@bpmn-io/extract-process-variables-0.3.0.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40bpmn-io%2Fextract-process-variables%2Fdownload%2F%40bpmn-io%2Fextract-process-variables-0.3.0.tgz#175f81114b44092cefa6e15b45427f22f865031f"
+  resolved "https://registry.npmmirror.com/@bpmn-io/extract-process-variables/download/@bpmn-io/extract-process-variables-0.3.0.tgz#175f81114b44092cefa6e15b45427f22f865031f"
   integrity sha1-F1+BEUtECSzvpuFbRUJ/IvhlAx8=
   dependencies:
     min-dash "^3.5.2"
@@ -2647,7 +2647,7 @@ boolbase@^1.0.0, boolbase@~1.0.0:
 
 bpmn-js-cli@^2.0.0:
   version "2.0.2"
-  resolved "https://registry.nlark.com/bpmn-js-cli/download/bpmn-js-cli-2.0.2.tgz#9a68ebc6e1b8bb675b680c332a727f698b45cbb5"
+  resolved "https://registry.npm.taobao.org/bpmn-js-cli/download/bpmn-js-cli-2.0.2.tgz#9a68ebc6e1b8bb675b680c332a727f698b45cbb5"
   integrity sha1-mmjrxuG4u2dbaAwzKnJ/aYtFy7U=
   dependencies:
     min-dash "^3.1.0"
@@ -2667,7 +2667,7 @@ bpmn-js-properties-panel@^0.37.2:
 
 bpmn-js@^7.3.1:
   version "7.5.0"
-  resolved "https://registry.npmmirror.com/bpmn-js/download/bpmn-js-7.5.0.tgz?cache=0&sync_timestamp=1637315573302&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Fbpmn-js%2Fdownload%2Fbpmn-js-7.5.0.tgz#0e4675acdbdff676db859f8cb7ec395d20e7bbd8"
+  resolved "https://registry.npmmirror.com/bpmn-js/download/bpmn-js-7.5.0.tgz#0e4675acdbdff676db859f8cb7ec395d20e7bbd8"
   integrity sha1-DkZ1rNvf9nbbhZ+Mt+w5XSDnu9g=
   dependencies:
     bpmn-moddle "^7.0.4"
@@ -4439,7 +4439,7 @@ detect-node@^2.0.4:
 
 diagram-js-direct-editing@^1.6.1:
   version "1.6.3"
-  resolved "https://registry.nlark.com/diagram-js-direct-editing/download/diagram-js-direct-editing-1.6.3.tgz#e7c59d7ac395439728f8da155f93510c58740c48"
+  resolved "https://registry.nlark.com/diagram-js-direct-editing/download/diagram-js-direct-editing-1.6.3.tgz?cache=0&sync_timestamp=1623923817664&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fdiagram-js-direct-editing%2Fdownload%2Fdiagram-js-direct-editing-1.6.3.tgz#e7c59d7ac395439728f8da155f93510c58740c48"
   integrity sha1-58WdesOVQ5co+NoVX5NRDFh0DEg=
   dependencies:
     min-dash "^3.5.2"
@@ -4447,7 +4447,7 @@ diagram-js-direct-editing@^1.6.1:
 
 diagram-js-minimap@^2.0.3:
   version "2.0.4"
-  resolved "https://registry.nlark.com/diagram-js-minimap/download/diagram-js-minimap-2.0.4.tgz#834570de5203eb524f70fac7370744b091cdc844"
+  resolved "https://registry.npm.taobao.org/diagram-js-minimap/download/diagram-js-minimap-2.0.4.tgz#834570de5203eb524f70fac7370744b091cdc844"
   integrity sha1-g0Vw3lID61JPcPrHNwdEsJHNyEQ=
   dependencies:
     css.escape "^1.5.1"
@@ -8565,7 +8565,7 @@ path-exists@^4.0.0:
 
 path-intersection@^2.2.0:
   version "2.2.1"
-  resolved "https://registry.npm.taobao.org/path-intersection/download/path-intersection-2.2.1.tgz#8476b75fefb7ac402f810d304e0eb0c080c11fe7"
+  resolved "https://registry.nlark.com/path-intersection/download/path-intersection-2.2.1.tgz#8476b75fefb7ac402f810d304e0eb0c080c11fe7"
   integrity sha1-hHa3X++3rEAvgQ0wTg6wwIDBH+c=
 
 path-is-absolute@^1.0.0, path-is-absolute@^1.0.1:
@@ -11530,20 +11530,6 @@ vue-area-linkage@^5.1.0:
   dependencies:
     lodash.find "^4.6.0"
 
-vue-bpmn-modeler@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.nlark.com/vue-bpmn-modeler/download/vue-bpmn-modeler-1.2.0.tgz#8afcad5bf545fdba0b961a36b910472eef58661c"
-  integrity sha1-ivytW/VF/boLlho2uRBHLu9YZhw=
-  dependencies:
-    bpmn-js "^7.3.1"
-    bpmn-js-cli "^2.0.0"
-    bpmn-js-properties-panel "^0.37.2"
-    camunda-bpmn-moddle "^4.4.0"
-    core-js "^3.6.5"
-    diagram-js-minimap "^2.0.3"
-    inherits "^2.0.4"
-    vue "^2.6.12"
-
 vue-cropper@^0.5.4:
   version "0.5.4"
   resolved "https://registry.npmjs.org/vue-cropper/-/vue-cropper-0.5.4.tgz#0db3776894eea8673a3203a1513882a0eb4558ad"
@@ -11577,11 +11563,6 @@ vue-hot-reload-api@^2.2.0, vue-hot-reload-api@^2.3.0:
   version "2.3.4"
   resolved "https://registry.npmjs.org/vue-hot-reload-api/-/vue-hot-reload-api-2.3.4.tgz#532955cc1eb208a3d990b3a9f9a70574657e08f2"
   integrity sha512-BXq3jwIagosjgNVae6tkHzzIk6a8MHFtzAdwhnV5VlvPTFxDCvIttgSiHWjdGoTJvXtmRu5HacExfdarRcFhog==
-
-vue-i18n@^8.7.0:
-  version "8.18.2"
-  resolved "https://registry.npmjs.org/vue-i18n/-/vue-i18n-8.18.2.tgz#cd7c12f2e178e6faa23b0e3cfd2f7bac9305f8fc"
-  integrity sha512-0X5nBTCZAVjlwcrPaYJwNs3iipBBTv0AUHwQUOa8yP3XbQGWKbRHqBb3OhCYtum/IHDD21d/df5Xd2VgyxbxfA==
 
 vue-loader@^13.0.5:
   version "13.7.3"
@@ -11695,11 +11676,6 @@ vue@^2.4.4, vue@^2.5.17, vue@^2.5.3, vue@^2.6.10:
   version "2.6.11"
   resolved "https://registry.npmjs.org/vue/-/vue-2.6.11.tgz#76594d877d4b12234406e84e35275c6d514125c5"
   integrity sha512-VfPwgcGABbGAue9+sfrD4PuwFar7gPb1yl1UK1MwXoQPAw0BKSqWfoYCT/ThFrdEVWoI51dBuyCoiNU9bZDZxQ==
-
-vue@^2.6.12:
-  version "2.6.14"
-  resolved "https://registry.npmmirror.com/vue/download/vue-2.6.14.tgz#e51aa5250250d569a3fbad3a8a5a687d6036e235"
-  integrity sha1-5RqlJQJQ1Wmj+606ilpofWA24jU=
 
 vuedraggable@^2.20.0:
   version "2.24.0"

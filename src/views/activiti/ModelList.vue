@@ -104,9 +104,8 @@
       @cancel="cancelDesign"
       style="top: 20px;"
     >
-      <BpmnModeler v-model="modeler"></BpmnModeler>
-      <!--      <iframe :src="iframeUrl" frameborder="0" width="100%" height="800px" scrolling="auto"-->
-      <!--              style="background-color: #fff;" />-->
+            <iframe :src="iframeUrl" frameborder="0" width="100%" height="800px" scrolling="auto"
+                    style="background-color: #fff;" />
     </a-modal>
     <a-modal
       :title="viewTitle" width="90%"
@@ -132,7 +131,7 @@ export default {
   mixins: [LeadingtekListMixin],
   data() {
     return {
-      modeler:{
+      modeler: {
         // 模型xml数据
         xmlData: '',
         // svg图片数据
