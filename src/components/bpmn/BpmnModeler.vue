@@ -7,9 +7,10 @@
 
 <script>
 import BpmnModeler from './CustomModeler'
+import CustomModule from './CustomModeler/CustomControls'
 import CustomTranslate from './CustomTranslate'
-import propertiesPanelModule from 'bpmn-js-properties-panel';
-import propertiesProviderModule from 'bpmn-js-properties-panel/lib/provider/camunda';
+import propertiesPanelModule from 'bpmn-js-properties-panel'
+import propertiesProviderModule from 'bpmn-js-properties-panel/lib/provider/camunda'
 import minimapModule from 'diagram-js-minimap'
 import CliModule from 'bpmn-js-cli'
 import { debounce } from 'min-dash'
@@ -23,7 +24,8 @@ export default {
   name: 'BpmnModeler',
   props: {
     diagramXML: String,
-    propertiesPanel: null
+    customPropertiesPanel: Boolean,
+    control: Array
   },
   data() {
     return {
@@ -35,20 +37,26 @@ export default {
   },
   watch: {
     diagramXML(val) {
-      console.log(1)
       this.openDiagram(val)
     }
   },
   async mounted() {
-    console.log(1)
     console.log(this.propertiesPanel === '')
     let canvas = this.$refs['canvas']
+    let controlModule = {
+      control: ['value', this.control]
+    }
     let additionalModules = [
       customTranslateModule,
+      controlModule,
       minimapModule,
       CliModule
     ]
-    if (this.propertiesPanel === '' || this.propertiesPanel) {
+    if (this.customPropertiesPanel) {
+      additionalModules = additionalModules.concat([
+        CustomModule
+      ])
+    } else {
       additionalModules = additionalModules.concat([
         propertiesPanelModule,
         propertiesProviderModule
@@ -68,7 +76,6 @@ export default {
       }
     })
     await this.openDiagram(this.diagramXML).then(() => {
-      console.log(1)
       // 自动保存当前模型设计
       let _self = this
       let exportArtifacts = debounce(async () => {
@@ -96,7 +103,6 @@ export default {
   },
   methods: {
     async replace(data) {
-      console.log(1)
       let _self = this
       await this.openDiagram(this.diagramXML)
       let incomingTask = []
@@ -145,9 +151,7 @@ export default {
       })
     },
     openDiagram(xml) {
-      console.log(1)
       return new Promise(async (resolve, reject) => {
-        console.log(1)
         if (xml) {
           try {
             const result = await this.modeler.importXML(xml)
@@ -188,11 +192,9 @@ export default {
       })
     },
     saveSVG(done) {
-      console.log(1)
       this.modeler.saveSVG(done)
     },
     focusOut(event) {
-      console.log(1)
       let layerBase = document.querySelector('.layer-base')
       let zoom = layerBase.parentNode.getBoundingClientRect()
       if (event.pageX < zoom.left || event.pageX > (zoom.left + zoom.width + 100) || event.pageY < zoom.top || event.pageY > (zoom.top + zoom.height + 40)) {

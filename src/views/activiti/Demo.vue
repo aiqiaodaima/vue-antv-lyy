@@ -1,10 +1,12 @@
 <template>
-  <a-card :bordered="false" style="height: 300px">
-    <bpmn-modeler ref="modeler" v-model="modeler" propertiesPanel />
-  </a-card>
-<!--  <a-card :bordered="false" style="height: 300px">-->
-<!--    <bpmn-viewer :xmlData="viewData" :taskData="propTaskList" />-->
-<!--  </a-card>-->
+  <div id="app">
+    <a-card :bordered="false" style="height: 800px">
+      <bpmn-modeler ref="modeler" v-model="modeler" :customPropertiesPanel="true" :control="['create.start-event','hand-tool']"/>
+    </a-card>
+    <a-card :bordered="false" style="height: 300px">
+      <bpmn-viewer :xmlData="viewData" :taskData="propTaskList" />
+    </a-card>
+  </div>
 </template>
 
 <script>

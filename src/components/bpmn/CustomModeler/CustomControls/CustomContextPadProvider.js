@@ -20,16 +20,16 @@ export default function CustomContextPadProvider(injector, connect, translate) {
 
   // var cached = bind(this.getContextPadEntries, this)
   // var rules = this._rules
-  var elementFactory = this._elementFactory
-  var create = this._create
-  var autoPlace = this._autoPlace
-  var modeling = this._modeling
+  let elementFactory = this._elementFactory
+  let create = this._create
+  let autoPlace = this._autoPlace
+  let modeling = this._modeling
   // var contextPad = this._contextPadt
 
   this.getContextPadEntries = function(element) {
 
-    var actions = {}
-    var businessObject = element.businessObject
+    let actions = {}
+    let businessObject = element.businessObject
 
     function startConnect(event, element, autoActivate) {
       connect.start(event, element, autoActivate)
@@ -42,7 +42,7 @@ export default function CustomContextPadProvider(injector, connect, translate) {
       }
 
       function appendStart(event, element) {
-        var shape = elementFactory.createShape(assign({ type: type }, options))
+        let shape = elementFactory.createShape(assign({ type: type }, options))
         create.start(event, shape, {
           source: element
         })
