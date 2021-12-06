@@ -62,14 +62,14 @@ PaletteProvider.prototype.getPaletteEntries = function(/*element*/) {
   }
 
   function createSubprocess(event) {
-    var subProcess = elementFactory.createShape({
+    let subProcess = elementFactory.createShape({
       type: 'bpmn:SubProcess',
       x: 0,
       y: 0,
       isExpanded: true
     })
 
-    var startEvent = elementFactory.createShape({
+    let startEvent = elementFactory.createShape({
       type: 'bpmn:StartEvent',
       x: 40,
       y: 82,
