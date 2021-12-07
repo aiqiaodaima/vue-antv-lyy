@@ -8,6 +8,6 @@ export default function CustomModeler(options) {
 
 inherits(CustomModeler, Modeler)
 
-CustomModeler.prototype._modules = [].concat(CustomModeler.prototype._modules, [
-  CustomModule
-])
+// CustomModeler.prototype._modules = [].concat(CustomModeler.prototype._modules, [
+//   CustomModule
+// ])

@@ -15,7 +15,6 @@ import minimapModule from 'diagram-js-minimap'
 import CliModule from 'bpmn-js-cli'
 import { debounce } from 'min-dash'
 import camundaModdleDescriptor from 'camunda-bpmn-moddle/resources/camunda.json'
-import CustomModeler from './CustomModeler'
 
 let customTranslateModule = {
   translate: ['value', CustomTranslate]
@@ -58,6 +57,7 @@ export default {
     ]
     if (this.customPropertiesPanel) {
       additionalModules = additionalModules.concat([
+        CustomModule,
         propertiesPanelModule,
         propertiesProviderModule
       ])
