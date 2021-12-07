@@ -183,6 +183,7 @@ PaletteProvider.prototype.getPaletteEntries = function(/*element*/) {
       translate('Create Group')
     )
   }
+
   console.log(Object.keys(defaultActions))
   console.log(control)
   if (control === undefined) {

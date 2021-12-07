@@ -15,6 +15,7 @@ import minimapModule from 'diagram-js-minimap'
 import CliModule from 'bpmn-js-cli'
 import { debounce } from 'min-dash'
 import camundaModdleDescriptor from 'camunda-bpmn-moddle/resources/camunda.json'
+import CustomModeler from './CustomModeler'
 
 let customTranslateModule = {
   translate: ['value', CustomTranslate]
@@ -24,7 +25,10 @@ export default {
   name: 'BpmnModeler',
   props: {
     diagramXML: String,
-    customPropertiesPanel: Boolean,
+    customPropertiesPanel: {
+      required: false,
+      default: true
+    },
     control: Array
   },
   data() {
@@ -40,7 +44,7 @@ export default {
       this.openDiagram(val)
     }
   },
-  async mounted() {
+  mounted: async function() {
     console.log(this.propertiesPanel === '')
     let canvas = this.$refs['canvas']
     let controlModule = {
@@ -53,10 +57,6 @@ export default {
       CliModule
     ]
     if (this.customPropertiesPanel) {
-      additionalModules = additionalModules.concat([
-        CustomModule
-      ])
-    } else {
       additionalModules = additionalModules.concat([
         propertiesPanelModule,
         propertiesProviderModule
