@@ -191,6 +191,9 @@ export default {
   'Candidate Starter Configuration':'候选人启动器配置',
   'Candidate Starter Groups': '候选人启动组',
   'Candidate Starter Users': '选择启动候选人',
+  'Candidate Users': '候选人',
+  'Candidate Groups': '候选组',
+  'This maps to the task definition key.': '映射到任务主键',
   'Specify more than one group as a comma separated list.': '多个组名以逗号隔开',
   'Specify more than one user as a comma separated list.': '多个用户以逗号隔开',
   'History Configuration': '历史配置',
@@ -198,6 +201,8 @@ export default {
   'Tasklist Configuration': '任务列表配置',
   'Startable': '可启动',
   'Due Date': '到期时间',
+  'The follow up date as an EL expression (e.g. ${someDate} or an ISO date (e.g. 2015-06-26T09:54:00)': '跟踪日期必须符合EL表达式，如： ${someDate} ,或者一个ISO标准日期，如：2015-06-26T09:54:00',
+  'The due date as an EL expression (e.g. ${someDate} or an ISO date (e.g. 2015-06-26T09:54:00)': '跟踪日期必须符合EL表达式，如： ${someDate} ,或者一个ISO标准日期，如：2015-06-26T09:54:00',
   'Follow Up Date': '跟踪日期',
   'Priority': '优先级',
 }
