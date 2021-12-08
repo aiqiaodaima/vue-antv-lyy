@@ -61,6 +61,11 @@ export default {
         propertiesPanelModule,
         propertiesProviderModule
       ])
+    } else {
+      additionalModules = additionalModules.concat([
+        propertiesPanelModule,
+        propertiesProviderModule
+      ])
     }
     this.modeler = new BpmnModeler({
       container: canvas,
