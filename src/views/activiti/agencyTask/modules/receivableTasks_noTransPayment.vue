@@ -194,7 +194,6 @@
             type="primary"
             icon="reload"
             @click="searchReset"
-            :loading="loading"
             >重置</a-button
           >
         </a-form-model-item>
