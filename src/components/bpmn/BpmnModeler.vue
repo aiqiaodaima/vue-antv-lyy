@@ -176,9 +176,9 @@ export default {
             let modelerCanvas = this.modeler.get('canvas')
             let rootElement = modelerCanvas.getRootElement()
             let modeling = this.modeler.get('modeling')
-            // modeling.updateProperties(rootElement, {
-            //   // isExecutable: true
-            // });
+            modeling.updateProperties(rootElement, {
+              isExecutable: true
+            });
             // 设定开始节点名称和结束节点名称
             rootElement.children.forEach(n => {
               if (n.type === 'bpmn:StartEvent') {
