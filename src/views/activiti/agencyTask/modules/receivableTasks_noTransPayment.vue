@@ -106,14 +106,13 @@
               label="发起时间"
               :label-col="{ span: 6 }"
               :wrapper-col="{ span: 18 }"
-              prop="proName"
+              prop="startTime"
             >
-              <a-input
-                v-model="filterData.proName"
-                placeholder="请输入项目名称"
-                allowClear
-              >
-              </a-input>
+              <a-range-picker
+                v-model="filterData.startTime"
+                format="YYYY-MM-DD"
+                :placeholder="['开始时间', '结束时间']"
+                @change="onChange" />
             </a-form-model-item>
           </a-col>
           <a-col :span="6">
@@ -153,14 +152,13 @@
               label="划款时间"
               :label-col="{ span: 6 }"
               :wrapper-col="{ span: 18 }"
-              prop="cusName"
+              prop="time"
             >
-              <a-input
-                v-model="filterData.cusName"
-                placeholder="请输入划款时间"
-                allowClear
-              >
-              </a-input>
+              <a-range-picker
+                  v-model="filterData.time"
+                  format="YYYY-MM-DD"
+                  :placeholder="['开始时间', '结束时间']"
+                  @change="onChangeTime" />
             </a-form-model-item>
           </a-col>
           <a-col :span="6">
@@ -207,12 +205,6 @@
         @click="handleExportXls('表单示例')"
         >导出</a-button
       >
-      <a-button class="ant-alert ant-alert-info" style="margin-left: 8px" @click="example">
-      例子1
-    </a-button>
-     <a-button class="ant-alert ant-alert-info" style="margin-left: 8px" @click="sealExample">
-      用印经办例子
-    </a-button>
     </div>
     <a-table
       ref="table"
@@ -362,18 +354,19 @@ export default {
       this.filterData = {};
       this.$refs.ruleForm.resetFields();
     },
-    // 领取任务
-    getTesk() {
-      console.log(123);
+    // 发起时间
+    onChange(value, dateString){
+      console.log(dateString[0],dateString[1]);
+      this.filterData.startTime_begin = dateString[0];
+      this.filterData.startTime_end = dateString[1];
     },
-    // 例子
-    example(){
-      console.log(222);
+    // 划款时间
+    onChangeTime(value, dateString) {
+      console.log(dateString[0],dateString[1]);
+      this.filterData.time_begin = dateString[0];
+      this.filterData.time_end = dateString[1];
     },
-    // 使用印章例子
-    sealExample(){
-      console.log(111);
-    },
+  
     //列设置更改事件
       onColSettingsChange (checkedValues) {
         var key = this.$route.name+":colsettings";
