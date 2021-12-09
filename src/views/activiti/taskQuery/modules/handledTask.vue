@@ -1,5 +1,5 @@
 <template>
-<!-- 场外清算可领取任务 -->
+<!-- 已处理的任务 -->
   <a-card :bordered="false">
     <!-- 表单区域 -->
     <div class="table-page-search-wrapper">
@@ -201,16 +201,10 @@
     <div>
       <a-button
         class="ant-alert ant-alert-info" style="margin-bottom: 8px;"
-        icon="profile"
-        @click="getTesk"
-        >领取任务</a-button
+        icon="download"
+        @click="handleExportXls('表单示例')"
+        >导出</a-button
       >
-      <a-button class="ant-alert ant-alert-info" style="margin-left: 8px" @click="example">
-      例子1
-    </a-button>
-     <a-button class="ant-alert ant-alert-info" style="margin-left: 8px" @click="sealExample">
-      用印经办例子
-    </a-button>
     </div>
     <a-table
       ref="table"
@@ -242,18 +236,15 @@
         </div>
         <a-icon slot="filterIcon" type='setting' :style="{ fontSize:'16px',color:  '#108ee9' }" />
     </a-table>
-    <!-- 领取任务模态框 -->
-    <get-task-modal ref="getTaskModal" @refreshList="refreshList"></get-task-modal>
   </a-card>
 </template>
 <script>
 import locale from "ant-design-vue/es/date-picker/locale/zh_CN";
 import moment from "moment";
 import { LeadingtekListMixin } from '@/mixins/LeadingtekListMixin'
-import Vue from 'vue'
-import getTaskModal from './getTaskModal.vue';
+ import Vue from 'vue'
 export default {
-  components: {getTaskModal},
+  components: {},
   mixins: [LeadingtekListMixin],
   data() {
     return {
@@ -284,6 +275,11 @@ export default {
             dataIndex: 'name'
           },
           {
+            title: '当前处理',
+            align: "center",
+            dataIndex: 'handle'
+          },
+          {
             title: '指令来源',
             align: "center",
             dataIndex: 'keyWord'
@@ -309,24 +305,9 @@ export default {
             dataIndex: 'birthday'
           },
           {
-            title: '划款日期',
-            align: "center",
-            dataIndex: 'email'
-          },
-          {
-            title: '批量类型',
-            align: "center",
-            dataIndex: 'content'
-          },
-          {
-            title: '优先级',
-            align: "center",
-            dataIndex: 'first'
-          },
-          {
             title: '业务类型',
             align: "center",
-            dataIndex: 'type'
+            dataIndex: 'content'
           },
           {
             title: '所属机构',
@@ -373,10 +354,6 @@ export default {
       this.filterData = {};
       this.$refs.ruleForm.resetFields();
     },
-    // 刷新重置
-    refreshList() {
-      // this.loadData(1);
-    },
     // 发起时间
     onChange(value, dateString){
       console.log(dateString[0],dateString[1]);
@@ -389,19 +366,7 @@ export default {
       this.filterData.time_begin = dateString[0];
       this.filterData.time_end = dateString[1];
     },
-    // 领取任务
-    getTesk() {
-      this.$refs.getTaskModal.visible = true;
-      this.$refs.getTaskModal.title = "提醒";
-    },
-    // 例子
-    example(){
-      console.log(222);
-    },
-    // 使用印章例子
-    sealExample(){
-      console.log(111);
-    },
+  
     //列设置更改事件
       onColSettingsChange (checkedValues) {
         var key = this.$route.name+":colsettings";
