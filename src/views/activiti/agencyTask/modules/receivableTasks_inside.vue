@@ -235,16 +235,40 @@
           </a-card>
         </div>
         <a-icon slot="filterIcon" type='setting' :style="{ fontSize:'16px',color:  '#108ee9' }" />
+
+        <template slot="action" slot-scope="text, record">
+        <div class="editable-row-operations">
+          <span style="color: blue; cursor: pointer; margin-left: 10px"
+            @click="detail(record)"
+            >详情</span>
+            <span
+              style="color: red; cursor: pointer; margin-left: 10px"
+              @click="processChart(record)"
+              >流程图</span>     
+        </div>
+      </template>
     </a-table>
+    <!-- 详情模态框 -->
+    <detail-modal ref="detailModal" @refreshList="refreshList"></detail-modal>
+    <!-- 流程图模态框 -->
+    <process-modal ref="processModal" @refreshList="refreshList"></process-modal>
   </a-card>
 </template>
 <script>
 import locale from "ant-design-vue/es/date-picker/locale/zh_CN";
 import moment from "moment";
+import detailModal from "./detailModal.vue"
+import processModal from "./processModal.vue"
 import { LeadingtekListMixin } from '@/mixins/LeadingtekListMixin'
- import Vue from 'vue'
+import Vue from 'vue'
+const dataSource = [
+  {rowIndex: '1', name:'指令1', punchTime:'划款'},
+  {rowIndex: '2', name:'指令2', punchTime:'xianjin'},
+  {rowIndex: '3', name:'指令3', punchTime:'支付宝'},
+
+]
 export default {
-  components: {},
+  components: {detailModal,processModal},
   mixins: [LeadingtekListMixin],
   data() {
     return {
@@ -252,7 +276,9 @@ export default {
       moment,
       loading: false,
       filterData: {},
-      dataSource: [],
+      selectedRowKeys: [],
+      selectionRows: [],
+      dataSource: dataSource, //[],
       columns:[],
       settingColumns: [],
       url: {
@@ -287,7 +313,7 @@ export default {
           {
             title: '项目名称',
             align: "center",
-            dataIndex: 'sex',
+            dataIndex: 'project',
           },
           {
             title: '客户名称',
@@ -362,7 +388,13 @@ export default {
     // 重置
     searchReset() {
       this.filterData = {};
+      this.selectedRowKeys = [];
+      this.selectionRows = [];
       this.$refs.ruleForm.resetFields();
+    },
+    // 刷新重置
+    refreshList() {
+      // this.loadData(1);
     },
     // 发起时间
     onChange(value, dateString){
@@ -380,7 +412,17 @@ export default {
     handleExportXls() {
       console.log(111);
     },
-    //列设置更改事件
+    // 详情
+    detail(){
+      this.$refs.detailModal.visible = true;
+      this.$refs.detailModal.title = "详情";
+    },
+    // 流程图
+    processChart() {
+      this.$refs.processModal.visible = true;
+      this.$refs.processModal.title = "流程图设计";
+    },
+    //列设置更改事件(少一列or多一列)
       onColSettingsChange (checkedValues) {
         var key = this.$route.name+":colsettings";
         Vue.ls.set(key, checkedValues, 7 * 24 * 60 * 60 * 1000)

@@ -244,6 +244,10 @@
     </a-table>
     <!-- 领取任务模态框 -->
     <get-task-modal ref="getTaskModal" @refreshList="refreshList"></get-task-modal>
+    <!-- 详情模态框 -->
+    <detail-modal ref="detailModal" @refreshList="refreshList"></detail-modal>
+    <!-- 流程图模态框 -->
+    <process-modal ref="processModal" @refreshList="refreshList"></process-modal>
   </a-card>
 </template>
 <script>
@@ -252,8 +256,11 @@ import moment from "moment";
 import { LeadingtekListMixin } from '@/mixins/LeadingtekListMixin'
 import Vue from 'vue'
 import getTaskModal from './getTaskModal.vue';
+import detailModal from "./detailModal.vue"
+import processModal from "./processModal.vue"
+
 export default {
-  components: {getTaskModal},
+  components: {getTaskModal,detailModal,processModal},
   mixins: [LeadingtekListMixin],
   data() {
     return {
@@ -262,6 +269,8 @@ export default {
       loading: false,
       filterData: {},
       dataSource: [],
+      selectedRowKeys: [],
+      selectionRows: [],
       columns:[],
       settingColumns: [],
       url: {
@@ -371,6 +380,8 @@ export default {
     // 重置
     searchReset() {
       this.filterData = {};
+      this.selectedRowKeys = [];
+      this.selectionRows = [];
       this.$refs.ruleForm.resetFields();
     },
     // 刷新重置
@@ -388,6 +399,16 @@ export default {
       console.log(dateString[0],dateString[1]);
       this.filterData.time_begin = dateString[0];
       this.filterData.time_end = dateString[1];
+    },
+    // 详情
+    detail(){
+      this.$refs.detailModal.visible = true;
+      this.$refs.detailModal.title = "详情";
+    },
+    // 流程图
+    processChart() {
+      this.$refs.processModal.visible = true;
+      this.$refs.processModal.title = "流程图设计";
     },
     // 领取任务
     getTesk() {

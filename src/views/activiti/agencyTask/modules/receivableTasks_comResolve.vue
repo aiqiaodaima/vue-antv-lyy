@@ -236,15 +236,21 @@
         </div>
         <a-icon slot="filterIcon" type='setting' :style="{ fontSize:'16px',color:  '#108ee9' }" />
     </a-table>
+    <!-- 详情模态框 -->
+    <detail-modal ref="detailModal" @refreshList="refreshList"></detail-modal>
+    <!-- 流程图模态框 -->
+    <process-modal ref="processModal" @refreshList="refreshList"></process-modal>
   </a-card>
 </template>
 <script>
 import locale from "ant-design-vue/es/date-picker/locale/zh_CN";
 import moment from "moment";
+import detailModal from "./detailModal.vue"
+import processModal from "./processModal.vue"
 import { LeadingtekListMixin } from '@/mixins/LeadingtekListMixin'
  import Vue from 'vue'
 export default {
-  components: {},
+  components: {detailModal, processModal},
   mixins: [LeadingtekListMixin],
   data() {
     return {
@@ -253,6 +259,8 @@ export default {
       loading: false,
       filterData: {},
       dataSource: [],
+      selectedRowKeys: [],
+      selectionRows: [],
       columns:[],
       settingColumns: [],
       url: {
@@ -352,7 +360,13 @@ export default {
     // 重置
     searchReset() {
       this.filterData = {};
+      this.selectedRowKeys = [];
+      this.selectionRows = [];
       this.$refs.ruleForm.resetFields();
+    },
+    // 刷新重置
+    refreshList() {
+      // this.loadData(1);
     },
     // 发起时间
     onChange(value, dateString){
@@ -369,6 +383,16 @@ export default {
     // 导出
     handleExportXls() {
       console.log(111);
+    },
+    // 详情
+    detail(){
+      this.$refs.detailModal.visible = true;
+      this.$refs.detailModal.title = "详情";
+    },
+    // 流程图
+    processChart() {
+      this.$refs.processModal.visible = true;
+      this.$refs.processModal.title = "流程图设计";
     },
     //列设置更改事件
       onColSettingsChange (checkedValues) {
