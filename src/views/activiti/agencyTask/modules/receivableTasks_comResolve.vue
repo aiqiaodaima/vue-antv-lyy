@@ -235,6 +235,17 @@
           </a-card>
         </div>
         <a-icon slot="filterIcon" type='setting' :style="{ fontSize:'16px',color:  '#108ee9' }" />
+        <template slot="action" slot-scope="text, record">
+        <div class="editable-row-operations">
+          <span style="color: blue; cursor: pointer; margin-left: 10px"
+            @click="detail(record)"
+            >详情</span>
+            <span
+              style="color: red; cursor: pointer; margin-left: 10px"
+              @click="processChart(record)"
+              >流程图</span>     
+        </div>
+      </template>
     </a-table>
     <!-- 详情模态框 -->
     <detail-modal ref="detailModal" @refreshList="refreshList"></detail-modal>
@@ -248,7 +259,12 @@ import moment from "moment";
 import detailModal from "./detailModal.vue"
 import processModal from "./processModal.vue"
 import { LeadingtekListMixin } from '@/mixins/LeadingtekListMixin'
- import Vue from 'vue'
+import Vue from 'vue'
+ const dataSource = [
+  {rowIndex: '1', name:'指令1', punchTime:'划款'},
+  {rowIndex: '2', name:'指令2', punchTime:'xianjin'},
+  {rowIndex: '3', name:'指令3', punchTime:'支付宝'},
+]
 export default {
   components: {detailModal, processModal},
   mixins: [LeadingtekListMixin],
@@ -258,7 +274,7 @@ export default {
       moment,
       loading: false,
       filterData: {},
-      dataSource: [],
+      dataSource: dataSource,
       selectedRowKeys: [],
       selectionRows: [],
       columns:[],
