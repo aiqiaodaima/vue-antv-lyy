@@ -235,16 +235,41 @@
           </a-card>
         </div>
         <a-icon slot="filterIcon" type='setting' :style="{ fontSize:'16px',color:  '#108ee9' }" />
+        <template slot="action" slot-scope="text, record">
+        <div class="editable-row-operations">
+          <span style="color: blue; cursor: pointer; margin-left: 10px"
+            @click="detail(record)"
+            >详情</span>
+            <span
+              style="color: red; cursor: pointer; margin-left: 10px"
+              @click="processChart(record)"
+              >流程图</span>
+            <span style="color: blue; cursor: pointer; margin-left: 10px" @click="recall(record)">
+              撤回
+            </span>
+        </div>
+      </template>
     </a-table>
+    <!-- 详情模态框 -->
+    <detail-modal ref="detailModal" @refreshList="refreshList"></detail-modal>
+    <!-- 流程图模态框 -->
+    <process-modal ref="processModal" @refreshList="refreshList"></process-modal>
   </a-card>
 </template>
 <script>
 import locale from "ant-design-vue/es/date-picker/locale/zh_CN";
 import moment from "moment";
 import { LeadingtekListMixin } from '@/mixins/LeadingtekListMixin'
- import Vue from 'vue'
+import Vue from 'vue'
+import detailModal from "./detailModal.vue"
+import processModal from "./processModal.vue"
+const dataSource = [
+  {rowIndex: '1', name:'指令1', punchTime:'划款'},
+  {rowIndex: '2', name:'指令2', punchTime:'xianjin'},
+  {rowIndex: '3', name:'指令3', punchTime:'支付宝'},
+]
 export default {
-  components: {},
+  components: {detailModal,processModal},
   mixins: [LeadingtekListMixin],
   data() {
     return {
@@ -252,7 +277,7 @@ export default {
       moment,
       loading: false,
       filterData: {},
-      dataSource: [],
+      dataSource: dataSource,
       columns:[],
       settingColumns: [],
       url: {
@@ -354,6 +379,10 @@ export default {
       this.filterData = {};
       this.$refs.ruleForm.resetFields();
     },
+    // 刷新重置
+    refreshList() {
+      // this.loadData(1);
+    },
     // 发起时间
     onChange(value, dateString){
       console.log(dateString[0],dateString[1]);
@@ -366,7 +395,25 @@ export default {
       this.filterData.time_begin = dateString[0];
       this.filterData.time_end = dateString[1];
     },
-  
+    // 详情
+    detail(){
+      this.$refs.detailModal.visible = true;
+      this.$refs.detailModal.title = "详情";
+    },
+    // 流程图
+    processChart() {
+      this.$refs.processModal.visible = true;
+      this.$refs.processModal.title = "流程图设计";
+    },
+    // 撤回
+    recall() {
+      this.$confirm({
+        title: '提醒',
+        content: '撤回流程',
+        okText: '确定',
+        cancelText: '取消',
+      });
+    },
     //列设置更改事件
       onColSettingsChange (checkedValues) {
         var key = this.$route.name+":colsettings";
