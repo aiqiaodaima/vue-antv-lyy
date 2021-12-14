@@ -6,7 +6,7 @@
       :confirm-loading="confirmLoading"
       :maskClosable="false"
       @cancel="handleCancel"
-      :width="600"
+
     >
       <template slot="footer">
         <a-button @click="handleCancel">取消</a-button>
@@ -144,3 +144,9 @@ export default {
   },
 };
 </script>
+<style lang="less" scoped>
+.bodyStyle {
+  height: 100vh;
+  width: 1000px
+}
+</style>
