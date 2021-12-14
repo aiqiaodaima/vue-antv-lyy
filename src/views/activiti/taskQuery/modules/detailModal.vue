@@ -6,113 +6,110 @@
       :confirm-loading="confirmLoading"
       :maskClosable="false"
       @cancel="handleCancel"
-      :width="600"
+      :centered="true"
+      width="1500px"
+      :dialog-style="{ paddingBottom: '0' }"
+      :bodyStyle="{ height: 'calc(100vh - 108px)', padding: 0 }"
     >
       <template slot="footer">
         <a-button @click="handleCancel">取消</a-button>
-        <a-button type="primary" :loading="loading" @click="handleOk">
-          确定
-        </a-button>
+        <a-button type="primary" :loading="loading" @click="handleOk"> 确定 </a-button>
       </template>
-       <a-form-model :model="formData" ref="ruleForm" :rules="rules">
-        <a-row :gutter="24">
-          <a-col :span="12">
-            <a-form-model-item
-              label="指令编号"
-              prop="name"
-              :label-col="{ span: 9 }"
-              :wrapper-col="{ span: 15 }"
-            >
-             <a-input
-                placeholder="请输入指令编号"
-                v-model="formData.name"
-                showSearch
-                allowClear
-              ></a-input>
-            </a-form-model-item>
+      <div>
+        <a-row>
+          <a-col :span="14">
+            <div style="border-right: 1px solid #ddd; height: calc(100vh - 108px)">
+              pdf
+               <pdf src="../../../../assets/a1.pdf"></pdf>
+            </div>
+           
           </a-col>
-          <a-col :span="12">
-            <a-form-model-item
-              label="指令来源"
-              prop="keyWord"
-              :label-col="{ span: 9 }"
-              :wrapper-col="{ span: 15 }"
-            >
-             <a-input
-                placeholder="请输入指令来源"
-                v-model="formData.keyWord"
-                showSearch
-                allowClear
-              ></a-input>
-            </a-form-model-item>
+          <a-col :span="3">
+            <div style="height: calc(100vh - 108px); border-right: 1px solid #ddd;">
+              <div style="border-bottom: 1px solid #ddd">预留印章</div>
+              <img src="@assets/guaz.png" alt="" />
+            </div>
           </a-col>
-        </a-row>
-
-         <a-row :gutter="24">
-          <a-col :span="12">
-            <a-form-model-item
-              label="指令类型"
-              prop="punchTime"
-              :label-col="{ span: 9 }"
-              :wrapper-col="{ span: 15 }"
-            >
-             <a-input
-                placeholder="请输入指令类型"
-                v-model="formData.punchTime"
-                showSearch
-                allowClear
-              ></a-input>
-            </a-form-model-item>
-          </a-col>
-          <a-col :span="12">
-            <a-form-model-item
-              label="项目名称"
-              prop="project"
-              :label-col="{ span: 9 }"
-              :wrapper-col="{ span: 15 }"
-            >
-             <a-input
-                placeholder="请输入项目名称"
-                v-model="formData.project"
-                showSearch
-                allowClear
-              ></a-input>
-            </a-form-model-item>
+          <a-col :span="7">
+            <div class="part2" style="border-bottom: 1px solid #ddd; margin-top: 10px;margin-buttom:10px;">
+              <!-- 加入相关操作按钮 -->
+              <a-button>账户余额</a-button>
+              <a-button>账户明细</a-button>
+              <a-button>项目关联档案</a-button>
+              <a-button>作废</a-button>
+              <a-button>退回</a-button>
+              <a-button>取消领用</a-button>
+              <a-button>挂起</a-button>
+              <a-button>提交</a-button>
+            </div>
+            <div style="margin-top: 10px" >
+              <a-form-model ref="ruleForm" :model="formData" :label-col="labelCol" :wrapper-col="wrapperCol">
+                <a-form-model-item label="指令来源">
+                  <a-select v-model="formData.source" />
+                </a-form-model-item>
+                <a-form-model-item label="指令类型">
+                  <a-select v-model="formData.type" />
+                </a-form-model-item>
+                <a-form-model-item label="业务类型">
+                  <a-select v-model="formData.bussinessType" />
+                </a-form-model-item>
+                <a-form-model-item type="flex" layout="inline" label="项目名称">
+                  <a-row :gutter="16">
+                    <a-col :span="18">
+                      <a-input v-model="formData.projectName" />
+                    </a-col>
+                    <a-col :span="6"
+                      ><a-button style="right" type="primary" icon="search"
+                        >查询项目</a-button
+                      ></a-col
+                    >
+                  </a-row>
+                </a-form-model-item>
+                <a-form-model-item label="客户名称">
+                  <a-select v-model="formData.customName" />
+                </a-form-model-item>
+              </a-form-model>
+            </div>
           </a-col>
         </a-row>
-      </a-form-model>
+      </div>
     </a-modal>
   </div>
 </template>
 <script>
-import moment from "moment";
+import moment from 'moment'
+import pdf from 'vue-pdf';
+// const vueSrc=require('../../../../assets/a2.pdf')
 // import {
 //   foreginIncomeAndExpecditureAdd,
 //   foreginIncomeAndExpecditureEdit,
 // } from "@/api/api";
 export default {
+  components: {pdf},
   data() {
     return {
-      title: "",
+      title: '',
       visible: false,
       loading: false,
       confirmLoading: false,
-      rules: {},
-      formData: { },
-    };
+      labelCol: { span: 5 },
+      wrapperCol: { span: 14 },
+      formData: {},
+      // rsrc
+    }
   },
   watch: {},
   methods: {
     moment,
     handleCancel() {
       // this.$refs.ruleForm.resetFields(); // resetFields()对表单进行重置的方法
-      this.formData = {};
-      this.visible = false;
+      this.formData = {}
+      this.visible = false
     },
     handleOk(e) {
-      console.log(e);
-      this.visible = false;
-    }
+      console.log(e)
+      this.visible = false
+    },
     // handleOk() {
     //   this.$refs.ruleForm.validate((valid) => {
     //     if (valid) {
@@ -142,5 +139,10 @@ export default {
     //   });
     // },
   },
-};
+}
 </script>
+<style lang='less'>
+.part2 {
+  margin-bottom: 10px;
+}
+</style>
