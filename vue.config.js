@@ -93,8 +93,14 @@ module.exports = {
            '/leadingtek-boot': ''  //默认所有请求都加了jeecg-boot前缀，需要去掉
          }
        }, */
-      '/leadingtek-boot': {
-        target: 'http://10.14.121.48:8080', // 请求本地 需要jeecg-boot后台项目
+      '/leadingtek-boot-dev/': {
+        target: 'http://localhost:8080',
+        ws: true,
+        logLevel: 'debug',
+        changeOrigin: true
+      },
+      '/leadingtek-boot/': {
+        target: 'http://10.14.121.48:8080',
         ws: true,
         logLevel: 'debug',
         changeOrigin: true

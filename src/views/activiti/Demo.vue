@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <a-card :bordered="false" style="height: 800px">
-      <bpmn-modeler ref="modeler" v-model="modeler" :customPropertiesPanel="false" />
+      <bpmn-modeler ref="modeler" v-model="modeler" :customPropertiesPanel="true" />
     </a-card>
     <a-card :bordered="false" style="height: 300px">
       <bpmn-viewer :xmlData="viewData" :taskData="propTaskList" />
