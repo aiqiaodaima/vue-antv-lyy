@@ -7,7 +7,7 @@
       :maskClosable="false"
       @cancel="handleCancel"
       :centered="true"
-      width="1500px"
+      width="1300px"
       :dialog-style="{ paddingBottom: '0' }"
       :bodyStyle="{ height: 'calc(100vh - 108px)', padding: 0 }"
     >
@@ -18,10 +18,17 @@
       <div>
         <a-row>
           <a-col :span="14">
-            <div style="border-right: 1px solid #ddd; height: calc(100vh - 108px)">
-              pdf
-               <!-- <pdf src="../../../../assets/a1.pdf"></pdf> -->
-               <pdf :src="pdfSrc" v-for="i in numPages" :key="i"  :page="i"></pdf>
+            <div style="border-right: 1px solid #ddd; height: calc(100vh - 108px); width: 100%;overflow:auto">
+              <button @click="prePage">上一页</button>
+              <button @click="nextPage">下一页</button>
+              <div style="marginTop: 10px; color: #409EFF">{{ pageNum }} / {{ pageTotalNum }}</div>
+              <!-- <pdf src="../../../../assets/a1.pdf"></pdf> -->
+              <pdf
+                :src="pdfSrc"
+                :page="pageNum"
+                @progress="loadedRatio = $event"
+                @num-pages="pageTotalNum = $event"
+                ></pdf>
             </div>
           </a-col>
           <a-col :span="3">
@@ -96,7 +103,10 @@ export default {
       wrapperCol: { span: 14 },
       formData: {},
       pdfSrc: '/行测.pdf',
-      numPages: null  //  pdf 文件总页数
+      numPages: null,  //  pdf 文件总页数
+      pageNum: 1,
+      pageTotalNum: 1, // 总页数
+      loadedRatio: 0, // 当前页面的加载进度，范围是0-1 ，等于1的时候代表当前页已经完全加载完成了
     }
   },
   mounted() {
@@ -105,6 +115,18 @@ export default {
   watch: {},
   methods: {
     moment,
+     // 上一页
+    prePage() {
+      let page = this.pageNum
+      page = page > 1 ? page - 1 : this.pageTotalNum
+      this.pageNum = page
+    },
+    // 下一页
+    nextPage() {
+      let page = this.pageNum
+      page = page < this.pageTotalNum ? page + 1 : 1
+      this.pageNum = page
+    },
     handleCancel() {
       // this.$refs.ruleForm.resetFields(); // resetFields()对表单进行重置的方法
       this.formData = {}
