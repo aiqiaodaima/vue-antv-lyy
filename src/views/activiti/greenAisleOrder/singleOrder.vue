@@ -1,5 +1,5 @@
 <template>
-  <div style="background-color: #fff; padding: 20px">
+  <a-card :bordered="false">
     <a-row>
       <a-col :span="12">
         <div style="border-bottom: 1px solid #ddd; margin-top: 10px">
@@ -18,7 +18,7 @@
                 <a-col :span="23">
                   <a-input v-model="formData.projectName" />
                 </a-col>
-                <a-col :span="1"><a-button style="right" type="primary" icon="search">查询项目</a-button></a-col>
+                <a-col :span="1"><a-button style="right" type="primary">查询项目</a-button></a-col>
               </a-row>
             </a-form-model-item>
             <a-form-model-item label="客户名称">
@@ -50,12 +50,13 @@
             <a-form-model-item label="开户行">
               <a-input v-model="formData.bank" />
             </a-form-model-item>
-            <a-form-model-item type="flex" layout="inline" label="项目名称">
-              <a-row :gutter="16">
-                <a-col :span="18">
-                  <a-input v-model="formData.projectName" />
+            <a-form-model-item label="开户行">
+              <a-row :gutter="24">
+                <a-col :span="15">
+                  <a-input v-model="formData.bank" />
                 </a-col>
-                <a-col :span="6"><a-button style="right" type="primary" icon="search">查询项目</a-button></a-col>
+                <a-col :span="3" pull="1"><a-button type="primary">查询收款行</a-button></a-col>
+                <a-col :span="3" push="2"><a-button type="primary">手工录入</a-button></a-col>
               </a-row>
             </a-form-model-item>
             <a-form-model-item label="大额行号">
@@ -64,9 +65,67 @@
           </a-form-model>
         </div>
       </a-col>
-      <a-col :span="12"></a-col>
+      <a-col :span="12">
+        <a-form-model ref="ruleForm" :model="formData" :label-col="labelCol" :wrapper-col="wrapperCol">
+          <a-form-model-item label="付款类型">
+            <a-radio-group v-model="formData.paymentType" :default-value="1">
+              <a-radio :value="1"> 行内转账 </a-radio>
+              <a-radio :value="2"> 跨行转账 </a-radio>
+              <a-radio :value="3"> 智能支付 </a-radio>
+            </a-radio-group>
+          </a-form-model-item>
+          <a-form-model-item label="划款转账">
+            <a-date-picker
+              v-model="formData.transferMoney"
+              show-time
+              type="date"
+              placeholder="请选择时间"
+              style="width: 100%"
+            />
+          </a-form-model-item>
+          <a-form-model-item label="币种">
+            <a-select v-model="formData.currency">
+              <a-select-option value="美元"> 美元 </a-select-option>
+              <a-select-option value="人民币"> 人民币 </a-select-option>
+            </a-select>
+          </a-form-model-item>
+          <a-form-model-item label="金额">
+            <a-select v-model="formData.money" />
+          </a-form-model-item>
+          <a-form-model-item label="大写金额">
+            <a-select v-model="formData.capitalMoney" />
+          </a-form-model-item>
+          <a-form-model-item label="用途">
+            <a-row :gutter="24">
+              <a-col :span="12">
+                <a-select :size="size" default-value="自定义" style="width: 200px" @change="handleChange">
+                  <a-select-option v-for="i in 25" :key="(i + 9).toString(36) + i">
+                    {{ (i + 9).toString(36) + i }}
+                  </a-select-option>
+                </a-select>
+              </a-col>
+              <a-col :span="12"><a-input allowClear placeholder="请输入自定义用途" v-model="formData.user" /></a-col>
+            </a-row>
+          </a-form-model-item>
+          <a-form-model-item label="是否立即划款">
+            <a-radio-group v-model="value" :default-value="1" @change="onChange">
+              <a-radio :value="1"> 是 </a-radio>  
+              <a-radio :value="2"> 否 </a-radio>
+            </a-radio-group>
+          </a-form-model-item>
+          <a-form-model-item label="流程备注">
+            <a-input v-model="formData.remark" type="textarea" placeholder="请输入备注,最多输入100个字符"/>
+          </a-form-model-item>
+        </a-form-model>
+      </a-col>
     </a-row>
-  </div>
+    <a-row>
+      <a-col>
+        <a-button style="float:right; margin-left:10px" type="primary">取消</a-button>
+        <a-button  style="float:right; margin-left:10px" type="primary" > 确定 </a-button>
+      </a-col>
+    </a-row>
+  </a-card>
 </template>
 
 <script>
@@ -82,6 +141,12 @@ export default {
     // 查询项目按钮
     searchProject() {
       alert('查询项目！')
+    },
+    handleChange(value) {
+      console.log(`selected ${value}`)
+    },
+    onChange(e) {
+      console.log('radio checked', e.target.value);
     },
   },
 }

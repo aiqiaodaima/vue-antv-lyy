@@ -20,9 +20,9 @@
           <a-col :span="14">
             <div style="border-right: 1px solid #ddd; height: calc(100vh - 108px)">
               pdf
-               <pdf src="../../../../assets/a1.pdf"></pdf>
+               <!-- <pdf src="../../../../assets/a1.pdf"></pdf> -->
+               <pdf :src="pdfSrc" v-for="i in numPages" :key="i"  :page="i"></pdf>
             </div>
-           
           </a-col>
           <a-col :span="3">
             <div style="height: calc(100vh - 108px); border-right: 1px solid #ddd;">
@@ -77,9 +77,9 @@
   </div>
 </template>
 <script>
+
 import moment from 'moment'
 import pdf from 'vue-pdf';
-// const vueSrc=require('../../../../assets/a2.pdf')
 // import {
 //   foreginIncomeAndExpecditureAdd,
 //   foreginIncomeAndExpecditureEdit,
@@ -95,8 +95,12 @@ export default {
       labelCol: { span: 5 },
       wrapperCol: { span: 14 },
       formData: {},
-      // rsrc
+      pdfSrc: '/行测.pdf',
+      numPages: null  //  pdf 文件总页数
     }
+  },
+  mounted() {
+    this.getNumPages()
   },
   watch: {},
   methods: {
@@ -109,6 +113,16 @@ export default {
     handleOk(e) {
       console.log(e)
       this.visible = false
+    },
+    getNumPages() {
+      let loadingTask = pdf.createLoadingTask(this.pdfSrc);
+      loadingTask.promise
+        .then((pdf) => {
+          this.numPages = pdf.numPages;
+        })
+        .catch((err) => {
+          console.error("pdf 加载失败", err);
+        });
     },
     // handleOk() {
     //   this.$refs.ruleForm.validate((valid) => {
