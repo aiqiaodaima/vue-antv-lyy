@@ -18,17 +18,18 @@
       <div>
         <a-row>
           <a-col :span="14">
-            <div style="border-right: 1px solid #ddd; height: calc(100vh - 108px); width: 100%;overflow:auto">
-              <button @click="prePage">上一页</button>
-              <button @click="nextPage">下一页</button>
-              <div style="marginTop: 10px; color: #409EFF">{{ pageNum }} / {{ pageTotalNum }}</div>
+            <div style="border-right: 1px solid #ddd; height: calc(100vh - 108px);">
+              <!-- <button @click="prePage">上一页</button>
+              <button @click="nextPage">下一页</button> -->
+              <!-- <div style="marginTop: 10px; color: #409EFF">{{ pageNum }} / {{ pageTotalNum }}</div> -->
               <!-- <pdf src="../../../../assets/a1.pdf"></pdf> -->
-              <pdf
+              <!-- <pdf
                 :src="pdfSrc"
                 :page="pageNum"
                 @progress="loadedRatio = $event"
                 @num-pages="pageTotalNum = $event"
-                ></pdf>
+                ></pdf> -->
+                <iframe :src="pdfhref+pdfSrc" frameborder="0" width="100%" height="100%"></iframe>
             </div>
           </a-col>
           <a-col :span="3">
@@ -86,13 +87,16 @@
 <script>
 
 import moment from 'moment'
-import pdf from 'vue-pdf';
+// import pdf from 'vue-pdf';
+// import pdfjs from 'pdfjs-dist';
+// console.log(pdfjs ,'92');
+
 // import {
 //   foreginIncomeAndExpecditureAdd,
 //   foreginIncomeAndExpecditureEdit,
 // } from "@/api/api";
 export default {
-  components: {pdf},
+  // components: {pdf},
   data() {
     return {
       title: '',
@@ -102,7 +106,9 @@ export default {
       labelCol: { span: 5 },
       wrapperCol: { span: 14 },
       formData: {},
-      pdfSrc: '/行测.pdf',
+      pdfSrc: '?file='+window.origin +'/a1.pdf',
+      // pdfSrc: 'http://storage.xuetangx.com/public_assets/xuetangx/PDF/PlayerAPI_v1.0.6.pdf',
+      pdfhref:"",
       numPages: null,  //  pdf 文件总页数
       pageNum: 1,
       pageTotalNum: 1, // 总页数
@@ -111,12 +117,15 @@ export default {
   },
   mounted() {
     this.getNumPages()
+    console.log(window)
+    this.pdfhref=window.origin +'/pdfjs/web/viewer.html'
   },
   watch: {},
   methods: {
     moment,
      // 上一页
     prePage() {
+      console.log(1213);
       let page = this.pageNum
       page = page > 1 ? page - 1 : this.pageTotalNum
       this.pageNum = page

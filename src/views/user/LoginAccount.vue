@@ -43,8 +43,8 @@
         currdatetime: '',
         loginType: 0,
         model:{
-          username: '',
-          password: '',
+          username: 'admin',
+          password: '123456',
           inputCode: ''
         },
         validatorRules:{
