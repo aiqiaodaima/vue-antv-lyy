@@ -109,33 +109,16 @@ export default {
       pdfSrc: '?file='+window.origin +'/a1.pdf',
       // pdfSrc: 'http://storage.xuetangx.com/public_assets/xuetangx/PDF/PlayerAPI_v1.0.6.pdf',
       pdfhref:"",
-      numPages: null,  //  pdf 文件总页数
-      pageNum: 1,
-      pageTotalNum: 1, // 总页数
-      loadedRatio: 0, // 当前页面的加载进度，范围是0-1 ，等于1的时候代表当前页已经完全加载完成了
     }
   },
   mounted() {
-    this.getNumPages()
     console.log(window)
     this.pdfhref=window.origin +'/pdfjs/web/viewer.html'
   },
   watch: {},
   methods: {
     moment,
-     // 上一页
-    prePage() {
-      console.log(1213);
-      let page = this.pageNum
-      page = page > 1 ? page - 1 : this.pageTotalNum
-      this.pageNum = page
-    },
-    // 下一页
-    nextPage() {
-      let page = this.pageNum
-      page = page < this.pageTotalNum ? page + 1 : 1
-      this.pageNum = page
-    },
+    
     handleCancel() {
       // this.$refs.ruleForm.resetFields(); // resetFields()对表单进行重置的方法
       this.formData = {}
@@ -145,16 +128,7 @@ export default {
       console.log(e)
       this.visible = false
     },
-    getNumPages() {
-      let loadingTask = pdf.createLoadingTask(this.pdfSrc);
-      loadingTask.promise
-        .then((pdf) => {
-          this.numPages = pdf.numPages;
-        })
-        .catch((err) => {
-          console.error("pdf 加载失败", err);
-        });
-    },
+   
     // handleOk() {
     //   this.$refs.ruleForm.validate((valid) => {
     //     if (valid) {
