@@ -122,28 +122,20 @@
       </a-row>
       <a-row>
         <a-col>
-          <a-button style="float: right; margin-left: 10px" type="primary" @click="handleCancel"
+          <a-form-modal ref="ruleForm" :model="formData" :label-col="labelCol" :wrapper-col="wrapperCol">
+            <a-form-modal-item>
+               <a-button style="float: right; margin-left: 10px" type="primary" @click="handleCancel"> 清空 </a-button>
+               <a-button style="float: right; margin-left: 10px" type="primary" :loading="loading" @click="handleOk"> 提交 </a-button>
+            </a-form-modal-item>
+          </a-form-modal>
+          <!-- <a-button style="float: right; margin-left: 10px" type="primary" @click="handleCancel"
             >取消
-            <a-popconfirm title="是否提交？">
-              <a-icon slot="icon" type="question-circle-o" style="color: red" />
-            </a-popconfirm>
           </a-button>
           <a-button style="float: right; margin-left: 10px" type="primary" @click="handleOk"> 确定 </a-button>
-        </a-col>
+        </a-col> -->
       </a-row>
+      
     </a-card>
-    <a-model
-      title="提醒"
-      :visible="false"
-      :confirm-loading="confirmLoading"
-      :maskClosable="false"
-      @cancel="handleCancel"
-      :centered="true"
-    >
-      <template slot="footer">
-        <a-button type="primary" :loading="loading" @click="handleOk"> 确定 </a-button>
-      </template>
-    </a-model>
   </div>
 </template>
 
@@ -168,10 +160,20 @@ export default {
       console.log('radio checked', e.target.value)
     },
     handleCancel(e) {
-      console.log(e)
+      this.$confirm({
+        title: '提醒',
+        content: '是否提交',
+        okText: '确定',
+        cancelText: '取消',
+      })
     },
     handleOk(e) {
-      console.log(e)
+      this.$confirm({
+        title: '提醒',
+        content: '是否清空',
+        okText: '确定',
+        cancelText: '取消',
+      })
     },
   },
 }
