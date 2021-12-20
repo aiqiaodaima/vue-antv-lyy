@@ -1,4 +1,5 @@
 <template>
+<!-- 单笔指令 -->
   <div>
     <a-card :bordered="false">
       <a-row>
@@ -134,7 +135,6 @@
           <a-button style="float: right; margin-left: 10px" type="primary" @click="handleOk"> 确定 </a-button>
         </a-col> -->
       </a-row>
-      
     </a-card>
   </div>
 </template>
@@ -143,7 +143,7 @@
 export default {
   data() {
     return {
-      labelCol: { span: 5 },
+      labelCol: { span: 6 },
       wrapperCol: { span: 14 },
       formData: {},
     }
