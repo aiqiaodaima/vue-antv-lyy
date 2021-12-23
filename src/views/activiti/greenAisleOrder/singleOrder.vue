@@ -162,7 +162,7 @@ export default {
     handleCancel(e) {
       this.$confirm({
         title: '提醒',
-        content: '是否提交',
+        content: '是否清空',
         okText: '确定',
         cancelText: '取消',
       })
@@ -170,7 +170,7 @@ export default {
     handleOk(e) {
       this.$confirm({
         title: '提醒',
-        content: '是否清空',
+        content: '是否提交',
         okText: '确定',
         cancelText: '取消',
       })

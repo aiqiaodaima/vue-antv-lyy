@@ -19,16 +19,6 @@
         <a-row>
           <a-col :span="14">
             <div style="border-right: 1px solid #ddd; height: calc(100vh - 108px);">
-              <!-- <button @click="prePage">上一页</button>
-              <button @click="nextPage">下一页</button> -->
-              <!-- <div style="marginTop: 10px; color: #409EFF">{{ pageNum }} / {{ pageTotalNum }}</div> -->
-              <!-- <pdf src="../../../../assets/a1.pdf"></pdf> -->
-              <!-- <pdf
-                :src="pdfSrc"
-                :page="pageNum"
-                @progress="loadedRatio = $event"
-                @num-pages="pageTotalNum = $event"
-                ></pdf> -->
                 <iframe :src="pdfhref+pdfSrc" frameborder="0" width="100%" height="100%"></iframe>
             </div>
           </a-col>
