@@ -4,7 +4,7 @@
     <div>
       <a-row>
         <a-col :span="14">
-          <div style="border-right: 1px solid #ddd; height: calc(100vh - 108px)">
+          <div style="border-right: 1px solid #ddd; height: 100vh">
             <iframe :src="pdfhref + pdfSrc" frameborder="0" width="100%" height="100%"></iframe>
           </div>
         </a-col>
@@ -16,7 +16,7 @@
                 <a-select-option key="2" :value="2">柜面经办-划款指令</a-select-option>
               </a-select>
             </a-form-model-item>
-            <a-form-model-item label="客户名称" :label-col="{ span: 4 }" :wrapper-col="{ span: 20 }">
+            <a-form-model-item style="margin-top: -30px" label="客户名称" :label-col="{ span: 4 }" :wrapper-col="{ span: 20 }">
               <a-input v-model="formData.customName"></a-input>
             </a-form-model-item>
             <a-form-model-item style="margin-left: 90px; margin-top: -30px">
@@ -30,42 +30,44 @@
             </a-form-model-item>
           </a-form-model>
           <!-- 树型区域1 -->
-          <div style="margin-top: -20px">
-            <span style="color: blue; margin-left: 15px"
+          <div style="margin-top: -20px;">
+            <span style="color: blue; margin-left: 15px;height: 20px"
               >已清分任务
               <a-badge count="5" style="margin-top: -5px" />
             </span>
-            <div>
+            <div style="width:500px;height:200px;overflow:hidden">
               <a-tree :treeData="treeData">
                 <template slot="custom" slot-scope="item">
-                  <div class="tree-view-item" style="margin-top: -5px">
+                  <div class="tree-view-item" style="height: 250px">
                     <a-icon v-if="item.dataIndex == '1'" type="folder-open" />
                     <a-icon v-if="item.dataIndex == '2'" type="file" />
                     <span class="tree-view-left">{{ item.title }}</span>
                     <span v-if="item.dataIndex == '1'" style="margin-left: 100px">指令平台经办</span>
-                    <span style="margin-left: 30px">1文件</span>
-                    <a-icon type="minus" />
+                    <span v-if="item.dataIndex == '2'" style="margin-left: 155px;"></span>
+                    <span style="margin-left: 98px;">1文件</span>
+                    <span style="margin-left:50px"><a-icon type="minus"/></span>
                   </div>
                 </template>
               </a-tree>
             </div>
           </div>
           <!-- 树型区域2 -->
-          <div style="margin-top: -20px">
-            <span style="color: blue; margin-left: 15px"
+          <div style="margin-top: -20px;">
+            <span style="color: blue; margin-left: 15px;height: 20px"
               >收件箱文件
               <a-badge count="3" style="margin-top: -5px" />
             </span>
-            <a-button style="float: right" icon="folder" type="primary">从本地添加</a-button>
-            <div>
+            <a-button size="small" style="margin-left:262px" icon="folder" type="primary">从本地添加</a-button>
+            <div style="width:500px;height:200px;overflow:hidden">
               <a-tree :treeData="treeData2" checkable>
                 <template slot="custom" slot-scope="item">
                   <div class="tree-view-item" style="margin-top: 10px">
                     <a-icon v-if="item.dataIndex == '1'" type="folder-open" />
                     <a-icon v-if="item.dataIndex == '2'" type="file" />
                     <span class="tree-view-left">{{ item.title }}</span>
-                    <span v-if="item.dataIndex == '2'" style="margin-left: 100px">中信证券1期</span>
-                    <a-icon type="minus" />
+                    <span v-if="item.dataIndex == '1'" style="margin-left: 150px;"></span>
+                    <span v-if="item.dataIndex == '2'" style="margin-left: 100px;margin-right:-15px">中信证券1期</span>
+                    <span style="margin-left:155px"><a-icon type="minus" /></span>
                   </div>
                 </template>
               </a-tree>
@@ -76,19 +78,19 @@
             <div>
               <a-row :gutter="14">
                 <a-col :span="18">
-                  <a-form-model-item label="查找内容" :label-col="{ span: 5 }" :wrapper-col="{ span: 19 }">
+                  <a-form-model-item style="margin-top: -10px" label="查找内容" :label-col="{ span: 5 }" :wrapper-col="{ span: 19 }">
                     <a-input v-model="formData.customName"></a-input>
                   </a-form-model-item>
                 </a-col>
                 <a-col :span="5">
-                  <a-button>ctrl键切换类型</a-button>
+                  <a-button style="margin-top: -10px">ctrl键切换类型</a-button>
                 </a-col>
               </a-row>
             </div>
             <a-table
               ref="table"
               rowKey="uuid"
-              size="middle"
+              size="small"
               :dataSource="dataSource"
               :columns="columns"
               :pagination="false"
@@ -96,9 +98,9 @@
             </a-table>
           </div>
           <!-- 提交按钮区域 -->
-          <div style="margin-top: 15px">
-            <a-button style="float: right; margin-left: 10px" type="primary"> 取消 </a-button>
-            <a-button style="float: right; margin-left: 10px" type="primary" :loading="loading"> 提交 </a-button>
+          <div style="margin-top: 10px">
+            <a-button style="float: right; margin-left: 10px" size="small" type="primary"> 取消 </a-button>
+            <a-button style="float: right; margin-left: 10px" size="small" type="primary" :loading="loading"> 提交 </a-button>
           </div>
         </a-col>
       </a-row>
