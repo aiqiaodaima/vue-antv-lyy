@@ -59,18 +59,28 @@
         </a-col>
     <a-col :span="16">
       <a-card style="width: 100%; height: 100%">
-        <a-form-model layout="inline" :model="formData">
+        <a-form-model style="margin-bottom: 10px" layout="inline" :model="formData">
           <a-form-model-item label="选择文件">
             <a-input v-model="formData.selectFile">
             </a-input>
           </a-form-model-item>
           <a-form-model-item>
-            <a-button type="primary" class="ant-alert ant-alert-info" style="margin-left: 8px">浏览</a-button>
+              <a-upload
+                name="file"
+                :multiple="true"
+                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                :headers="headers"
+                @change="handleChange"
+              >
+              <a-button style="margin-left: 7px" type="primary">浏览</a-button>
+            </a-upload>
+          </a-form-model-item>
+          <a-form-model-item>
             <a-button class="ant-alert ant-alert-info" style="margin-left: 8px">修改</a-button>
             <a-button class="ant-alert ant-alert-info" style="margin-left: 8px">全部删除</a-button>
             <a-button class="ant-alert ant-alert-info" style="margin-left: 8px">忽略验证</a-button>
             <a-button class="ant-alert ant-alert-info" style="margin-left: 8px">导出</a-button>
-          </a-form-model-item>
+          </a-form-model-item>  
         </a-form-model>
         <a-table
         ref="table"
@@ -85,7 +95,6 @@
         bordered>
       </a-table>
       </a-card>
-     
     </a-col>
     </a-row>
     <!-- 底部 -->
@@ -105,18 +114,18 @@
 <script>
 import { LeadingtekListMixin } from '@/mixins/LeadingtekListMixin'
 const dataSource = [
-  {rowIndex: '1', name:'指令1', punchTime:'划款'},
-  {rowIndex: '2', name:'指令2', punchTime:'xianjin'},
-  {rowIndex: '3', name:'指令3', punchTime:'支付宝'},
-  {rowIndex: '1', name:'指令1', punchTime:'划款'},
-  {rowIndex: '2', name:'指令2', punchTime:'xianjin'},
-  {rowIndex: '3', name:'指令3', punchTime:'支付宝'},
-  {rowIndex: '1', name:'指令1', punchTime:'划款'},
-  {rowIndex: '2', name:'指令2', punchTime:'xianjin'},
-  {rowIndex: '3', name:'指令3', punchTime:'支付宝'},
-  {rowIndex: '1', name:'指令1', punchTime:'划款'},
-  {rowIndex: '2', name:'指令2', punchTime:'xianjin'},
-  {rowIndex: '3', name:'指令3', punchTime:'支付宝'},
+  { rowIndex: '1', name: '指令1', punchTime: '划款' },
+  { rowIndex: '2', name: '指令2', punchTime: 'xianjin' },
+  { rowIndex: '3', name: '指令3', punchTime: '支付宝' },
+  { rowIndex: '1', name: '指令1', punchTime: '划款' },
+  { rowIndex: '2', name: '指令2', punchTime: 'xianjin' },
+  { rowIndex: '3', name: '指令3', punchTime: '支付宝' },
+  { rowIndex: '1', name: '指令1', punchTime: '划款' },
+  { rowIndex: '2', name: '指令2', punchTime: 'xianjin' },
+  { rowIndex: '3', name: '指令3', punchTime: '支付宝' },
+  { rowIndex: '1', name: '指令1', punchTime: '划款' },
+  { rowIndex: '2', name: '指令2', punchTime: 'xianjin' },
+  { rowIndex: '3', name: '指令3', punchTime: '支付宝' },
 ]
 export default {
   mixins: [LeadingtekListMixin],
@@ -126,6 +135,7 @@ export default {
       wrapperCol: { span: 14 },
       formData: {},
       dataSource: dataSource,
+      headers: { authorization: 'authorization-text' }, //上传文件
       url: {
         list: '/activiti/models',
       },
@@ -215,7 +225,18 @@ export default {
         cancelText: '取消',
       })
     },
-  }
+    handleChange(info) {
+      console.log(info)
+      if (info.file.status !== 'uploading') {
+        console.log(info.file, info.fileList)
+      }
+      if (info.file.status === 'done') {
+        this.$message.success(`${info.file.name} 文件上传成功`)
+      } else if (info.file.status === 'error') {
+        this.$message.error(`${info.file.name} 文件上传失败`)
+      }
+    },
+  },
 }
 </script>
 
