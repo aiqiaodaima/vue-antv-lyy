@@ -5,7 +5,7 @@
         <a-row :gutter="24">
           <a-col :md="6" :sm="8">
             <a-form-item label="模型名称">
-              <a-input placeholder="请输入搜索关键词" v-model="queryParam.keyword"></a-input>
+              <a-input placeholder="请输入搜索关键词" v-model="queryParam.name"></a-input>
             </a-form-item>
           </a-col>
 
@@ -29,7 +29,7 @@
             <!--                </a-upload>-->
             <!--            </a-col>-->
             <a-col :md="12" :sm="12">
-                <a-button type="primary" @click="createObj.visible=true" icon="search">创建模型</a-button>
+                <a-button type="primary" @click="showCreateObj" icon="search">创建模型</a-button>
             </a-col>
           </span>
         </a-row>
@@ -45,17 +45,8 @@
              :pagination="ipagination"
              :loading="loading"
              @change="handleTableChange">
-      <span slot="revision" slot-scope="text, record">
-        v.{{ text }}
-      </span>
-      <span slot="metaInfo" slot-scope="text, record">
-        <j-ellipsis :value="JSON.parse(text).description" :length="10" />
-      </span>
       <!-- 字符串超长截取省略号显示-->
-      <span slot="logContent" slot-scope="text, record">
-          <j-ellipsis :value="text" :length="10" />
-        </span>
-      <span slot="make" slot-scope="text, record">
+      <span slot="operation" slot-scope="text, record">
         <a href="javascript:void(0);" @click="deployment(record)">发布</a>
         <a-divider type="vertical" />
         <a href="javascript:void(0);" @click="design(record.id)">设计</a>
@@ -73,7 +64,6 @@
         <a href="javascript:void(0);" @click="exportModel(record.id,'bpmn')">xml</a>
         <a-divider type="vertical" />
         <a href="javascript:void(0);" @click="exportDiagram(record)">图解</a>
-
       </span>
     </a-table>
 
@@ -84,28 +74,69 @@
       :confirmLoading="createObj.confirmLoading"
       @cancel="createObj.visible = false"
     >
-      <div>
-        模型名称：
-        <a-input placeholder="输入模型名称" v-model="createObj.name"></a-input>
-        <br />
-        模型Key：
-        <a-input placeholder="输入模型Key" v-model="createObj.key"></a-input>
-        <br />
-        模型描述：
-        <a-textarea placeholder="输入模型描述" v-model="createObj.description" :rows="4" />
-      </div>
+      <a-form-model ref="createObjForm"
+                    layout="horizontal"
+                    :model="model"
+                    :rules="rules"
+                    :label-col="{span: 4}"
+                    :wrapper-col="{span: 14}"
+      >
+        <a-form-model-item label="模型名称" prop="name">
+          <a-input v-model="model.name" placeholder="请输入模型名称" />
+        </a-form-model-item>
+        <a-form-model-item label="指令来源" prop="caseSource">
+          <a-select v-model="model.caseSource"
+                    placeholder="请选择指令来源"
+          >
+            <a-select-option value="">
+              请选择
+            </a-select-option>
+            <a-select-option v-for=" v in createObj.caseSource" :key="v.value">
+              {{ v.text }}
+            </a-select-option>
+          </a-select>
+        </a-form-model-item>
+        <a-form-model-item label="指令类型" prop="caseType">
+          <a-select v-model="model.caseType"
+                    placeholder="请选择指令类型"
+          >
+            <a-select-option value="">
+              请选择
+            </a-select-option>
+            <a-select-option v-for=" v in createObj.caseType" :key="v.value">
+              {{ v.text }}
+            </a-select-option>
+          </a-select>
+        </a-form-model-item>
+        <a-form-model-item label="业务类型" required prop="caseBusinessType">
+          <a-select v-model="model.caseBusinessType"
+                    placeholder="请选择业务类型"
+          >
+            <a-select-option value="">
+              请选择
+            </a-select-option>
+            <a-select-option v-for=" v in createObj.caseBusinessType" :key="v.value">
+              {{ v.text }}
+            </a-select-option>
+          </a-select>
+        </a-form-model-item>
+      </a-form-model>
     </a-modal>
 
     <a-modal
       title="设计模型"
       :visible="updateObj.visible"
-      :footer="null" :maskClosable="false"
-      width="90%"
+      :maskClosable="false"
+      width="100%"
+      ok-text="部署"
+      cancel-text="关闭"
+      @ok="deploy"
       @cancel="cancelDesign"
-      style="top: 20px;"
     >
-            <iframe :src="iframeUrl" frameborder="0" width="100%" height="800px" scrolling="auto"
-                    style="background-color: #fff;" />
+      <a-card :bordered="false" style="height: 100%">
+        <bpmn-modeler ref="modeler" v-model="modeler" :customPropertiesPanel="true" :key="key" />
+      </a-card>
+
     </a-modal>
     <a-modal
       :title="viewTitle" width="90%"
@@ -122,43 +153,95 @@
 <script>
 import { LeadingtekListMixin } from '@/mixins/LeadingtekListMixin'
 import { postAction, deleteAction, getAction } from '@/api/manage'
-// import { VueBpmnModeler } from 'vue-bpmn-modeler'
-// import 'vue-bpmn-modeler/lib/vue-bpmn-modeler.css'
+import store from '@/store'
 
 export default {
   name: 'ModelList',
   // components: [VueBpmnModeler],
   mixins: [LeadingtekListMixin],
+  created: function() {
+    store.dispatch('updateCaseSource', this.url.dict + 'case_source')
+      .then(e => {
+        console.log(e)
+        if (e.success) {
+          this.createObj.caseSource = e.result
+        }
+      })
+
+    store.dispatch('updateCaseType', this.url.dict + 'case_type')
+      .then((e) => {
+        console.log(e)
+        if (e.success) {
+          this.createObj.caseSource = e.result
+        }
+      })
+
+    store.dispatch('updateCaseBusinessType', this.url.dict + 'case_business_type')
+      .then((e) => {
+        console.log(e)
+        if (e.success) {
+          this.createObj.caseBusinessType = e.result
+        }
+      })
+  },
   data() {
     return {
+      key: null,
+      lastModeler: {},
+      modelId: null,
       modeler: {
         // 模型xml数据
         xmlData: '',
         // svg图片数据
         svgImage: ''
       },
+      modelerMap: {},
       url: {
-        list: '/activiti/models',
-        create: '/activiti/models/create',
+        list: '/activiti/model',
+        create: '/activiti/model/create',
         delete: '/activiti/models/',
         design: '/activiti/modeler.html',
         export: '/activiti/models/export/',
         diagram: '/activiti/models/exportDiagram',
-        deployment: '/activiti/models/deployment/'
+        deploy: '/activiti/model/deploy',
+        dict: '/sys/dict/getDictItems/'
       },
       createObj: {
         visible: false,
         confirmLoading: false,
         name: '',
         key: '',
-        description: ''
+        description: '',
+        caseSource: [],
+        caseType: [],
+        caseBusinessType: []
+      },
+      model: {
+        name: '',
+        caseSource: '',
+        caseType: '',
+        caseBusinessType: ''
+      },
+      rules: {
+        'name': [
+          { required: true, message: '模型名称不能为空', trigger: 'blur' }
+        ],
+        'caseSource': [
+          { required: true, message: '指令来源不能为空', trigger: 'blur' }
+        ],
+        'caseType': [
+          { required: true, message: '指令类型不能为空', trigger: 'blur' }
+        ],
+        'caseBusinessType': [
+          { required: true, message: '业务类型不能为空', trigger: 'blur' }
+        ]
       },
       updateObj: {
         visible: false,
         confirmLoading: false
       },
       queryParam: {
-        keyword: ''
+        name: ''
       },
       iframeUrl: '',
       diagramUrl: '',
@@ -183,48 +266,68 @@ export default {
           title: '模型名称', width: 150,
           align: 'center',
           dataIndex: 'name',
-          scopedSlots: { customRender: 'logContent' }
+          scopedSlots: { customRender: 'name' }
         },
         {
-          title: '模型key', width: 150,
-          dataIndex: 'key',
-          align: 'center'
-        },
-        {
-          title: '版本', width: 80,
-          dataIndex: 'revision',
+          title: '指令来源', width: 150,
+          dataIndex: 'caseSource',
           align: 'center',
-          scopedSlots: { customRender: 'revision' }
-        },
-        {
-          title: '备注描述', width: 150,
-          dataIndex: 'metaInfo',
-          align: 'center',
-          scopedSlots: { customRender: 'metaInfo' }
-        },
-        {
-          title: '是否部署', width: 150,
-          dataIndex: 'deploymentId',
-          align: 'center',
-          customRender: function(time, row, index) {
-            return row.deploymentId ? '已部署' : '未部署'
+          scopedSlots: { customRender: 'caseSource' },
+          customRender: function(value) {
+            let caseSource = store.getters.model.case_source.filter(v => v.value === value).map(e => {
+              return e.text
+            })
+            return caseSource[0]
           }
         },
         {
-          title: '创建时间', width: 150,
-          dataIndex: 'createTime',
-          align: 'center'
-          // sorter:true
+          title: '指令类型', width: 80,
+          dataIndex: 'caseType',
+          align: 'center',
+          scopedSlots: { customRender: 'caseType' },
+          customRender: function(value) {
+            let caseType = store.getters.model.case_type.filter(v => v.value === value).map(e => {
+              return e.text
+            })
+            return caseType[0]
+          }
         },
         {
-          title: '最后更新时间', width: 150,
-          dataIndex: 'lastUpdateTime',
-          align: 'center'
+          title: '业务类型', width: 150,
+          dataIndex: 'caseBusinessType',
+          align: 'center',
+          scopedSlots: { customRender: 'caseBusinessType' },
+          customRender: function(value) {
+            let caseType = store.getters.model.case_business_type.filter(v => v.value === value).map(e => {
+              return e.text
+            })
+            return caseType[0]
+          }
         },
+        {
+          title: '是否部署', width: 150,
+          dataIndex: 'deployId',
+          align: 'center',
+          scopedSlots: { customRender: 'deploymentId' },
+          customRender: function(value) {
+            return value === null ? '未部署' : '已经部署'
+          }
+        },
+        // {
+        //   title: '创建时间', width: 150,
+        //   dataIndex: 'createTime',
+        //   align: 'center'
+        //   // sorter:true
+        // },
+        // {
+        //   title: '最后更新时间', width: 150,
+        //   dataIndex: 'lastUpdateTime',
+        //   align: 'center'
+        // },
         {
           title: '操作', width: 250,
           dataIndex: '',
-          scopedSlots: { customRender: 'make' },
+          scopedSlots: { customRender: 'operation' },
           align: 'center'
         }
       ]
@@ -239,24 +342,40 @@ export default {
       this.loadData(this.ipagination.current)
     },
     /**
+     * 显示创建模型
+     */
+    showCreateObj() {
+      this.createObj.visible = true
+      this.model = {
+        name: '',
+        caseSource: '',
+        caseType: '',
+        caseBusinessType: ''
+      }
+    },
+    /**
      * 创建模型
      */
     createModel() {
-      postAction(this.url.create, {
-        name: this.createObj.name,
-        key: this.createObj.key,
-        description: this.createObj.description
+      this.$refs.createObjForm.validate(valid => {
+        console.log(valid)
+        if (valid) {
+          postAction(this.url.create, this.model)
+            .then((response) => {
+              console.log('createModel', response)
+              this.createObj.confirmLoading = true
+              if (response.success === true) {
+                this.createObj.visible = false
+                this.$message.success('模型创建成功')
+              }
+              this.createObj.confirmLoading = false
+              this.loadData(this.ipagination.current)
+            })
+        } else {
+          this.$message.error('请填写表单信息')
+        }
       })
-        .then((response) => {
-          console.log(response)
-          this.createObj.confirmLoading = true
-          if (response.success === true) {
-            this.updateObj.visible = true
-            this.iframeUrl = `${window._CONFIG['domianURL']}${this.url.design}?modelId=${response.result.id}`
-            this.createObj.visible = false
-          }
-          this.createObj.confirmLoading = false
-        })
+
     },
     /**
      * 删除模型
@@ -284,8 +403,8 @@ export default {
         .loading('请稍等。。。', 0.8)
         .then(() => {
           _this.createObj.confirmLoading = true
-          _this.iframeUrl = `${window._CONFIG['domianURL']}${_this.url.design}?modelId=${id}`
-          console.log(_this.iframeUrl)
+          _this.modelId = id
+          _this.key = new Date().getTime()
           _this.updateObj.visible = true
           _this.createObj.confirmLoading = false
         })
@@ -310,6 +429,20 @@ export default {
         }
       })
     },
+    deploy() {
+      postAction(this.url.deploy, { id: this.modelId, xml: this.modeler.xmlData })
+        .then(response => {
+          console.log(response)
+          if (response.success) {
+            this.$message.success('保护署成功')
+          } else {
+            this.$message.error('部署失败')
+          }
+          this.updateObj.visible = false
+          this.createObj.confirmLoading = true
+          this.loadData(this.ipagination.current)
+        })
+    },
     exportModel(id, type) {
       let url = `${window._CONFIG['domianURL']}${this.url.export}${id}/${type}`
       let a = document.createElement('a')
@@ -322,30 +455,43 @@ export default {
       this.viewTitle = '流程图片预览(' + row.name + ')'
       this.diagramUrl = `${window._CONFIG['domianURL']}${this.url.diagram}?modelId=${row.id}`
       this.viewImage = true
-    },
-    deployment(row) {
-      let url = this.url.deployment + row.id
-      let name = row.name
-      let _this = this
-      this.$confirm({
-        title: '确认部署流程?',
-        content: `确认部署流程：${name}`,
-        onOk() {
-          getAction(url).then((response) => {
-            if (response.success === true) {
-              _this.$message.success(response.message)
-            } else {
-              _this.$message.error(response.message)
-            }
-            _this.loadData(_this.ipagination.current)
-          })
-        }
-      })
     }
+    // deployment(row) {
+    //   let url = this.url.deployment + row.id
+    //   let name = row.name
+    //   let _this = this
+    //   this.$confirm({
+    //     title: '确认部署流程?',
+    //     content: `确认部署流程：${name}`,
+    //     onOk() {
+    //       getAction(url).then((response) => {
+    //         if (response.success === true) {
+    //           _this.$message.success(response.message)
+    //         } else {
+    //           _this.$message.error(response.message)
+    //         }
+    //         _this.loadData(_this.ipagination.current)
+    //       })
+    //     }
+    //   })
+    // }
   }
 }
 </script>
 
-<style scoped>
+
+<style scoped lang="less">
 @import '~@assets/less/common.less';
+
+/deep/ .ant-modal {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+/deep/ .ant-modal-body {
+  height: 800px;
+}
 </style>

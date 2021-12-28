@@ -18,6 +18,7 @@ const getters = {
     return state.enhance.enhanceJs[code]
   },
   sysSafeMode: state => state.user.sysSafeMode,
+  model: state=> state.model
 
 }
 
