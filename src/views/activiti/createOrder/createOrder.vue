@@ -4,7 +4,7 @@
     <div>
       <a-row>
         <a-col :span="14">
-          <div style="border-right: 1px solid #ddd; height: 100vh">
+          <div style="border-right: 1px solid #ddd; height: calc(100vh - 108px)">
             <iframe :src="pdfhref + pdfSrc" frameborder="0" width="100%" height="100%"></iframe>
           </div>
         </a-col>
@@ -16,7 +16,12 @@
                 <a-select-option key="2" :value="2">柜面经办-划款指令</a-select-option>
               </a-select>
             </a-form-model-item>
-            <a-form-model-item style="margin-top: -30px" label="客户名称" :label-col="{ span: 4 }" :wrapper-col="{ span: 20 }">
+            <a-form-model-item
+              style="margin-top: -30px"
+              label="客户名称"
+              :label-col="{ span: 4 }"
+              :wrapper-col="{ span: 20 }"
+            >
               <a-input v-model="formData.customName"></a-input>
             </a-form-model-item>
             <a-form-model-item style="margin-left: 90px; margin-top: -30px">
@@ -30,12 +35,12 @@
             </a-form-model-item>
           </a-form-model>
           <!-- 树型区域1 -->
-          <div style="margin-top: -20px;">
-            <span style="color: blue; margin-left: 15px;height: 20px"
+          <div style="margin-top: -20px">
+            <span style="color: blue; margin-left: 15px; height: 20px"
               >已清分任务
               <a-badge count="5" style="margin-top: -5px" />
             </span>
-            <div style="width:500px;height:200px;overflow:hidden">
+            <div style="width: 500px; height: 200px; overflow: hidden">
               <a-tree :treeData="treeData">
                 <template slot="custom" slot-scope="item">
                   <div class="tree-view-item" style="height: 250px">
@@ -43,31 +48,42 @@
                     <a-icon v-if="item.dataIndex == '2'" type="file" />
                     <span class="tree-view-left">{{ item.title }}</span>
                     <span v-if="item.dataIndex == '1'" style="margin-left: 100px">指令平台经办</span>
-                    <span v-if="item.dataIndex == '2'" style="margin-left: 155px;"></span>
-                    <span style="margin-left: 98px;">1文件</span>
-                    <span style="margin-left:50px"><a-icon type="minus"/></span>
+                    <span v-if="item.dataIndex == '2'" style="margin-left: 155px"></span>
+                    <span style="margin-left: 98px">1文件</span>
+                    <span style="margin-left: 50px"><a-icon type="minus" /></span>
                   </div>
                 </template>
               </a-tree>
             </div>
           </div>
           <!-- 树型区域2 -->
-          <div style="margin-top: -20px;">
-            <span style="color: blue; margin-left: 15px;height: 20px"
+          <div style="margin-top: -20px">
+            <span style="color: blue; margin-left: 15px; height: 20px"
               >收件箱文件
               <a-badge count="3" style="margin-top: -5px" />
             </span>
-            <a-button size="small" style="margin-left:262px" icon="folder" type="primary">从本地添加</a-button>
-            <div style="width:500px;height:200px;overflow:hidden">
+            <a-upload
+              name="file"
+              :multiple="true"
+              action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+              :headers="headers"
+              @change="handleChange"
+            >
+              <a-button size="small" style="margin-left: 262px" icon="folder" type="primary">从本地添加</a-button>
+            </a-upload>
+            <!-- <a-button size="small" style="margin-left: 262px" icon="folder" type="primary">从本地添加</a-button> -->
+            <div style="width: 500px; height: 200px; overflow: hidden">
               <a-tree :treeData="treeData2" checkable>
                 <template slot="custom" slot-scope="item">
                   <div class="tree-view-item" style="margin-top: 10px">
                     <a-icon v-if="item.dataIndex == '1'" type="folder-open" />
                     <a-icon v-if="item.dataIndex == '2'" type="file" />
                     <span class="tree-view-left">{{ item.title }}</span>
-                    <span v-if="item.dataIndex == '1'" style="margin-left: 150px;"></span>
-                    <span v-if="item.dataIndex == '2'" style="margin-left: 100px;margin-right:-15px">中信证券1期</span>
-                    <span style="margin-left:155px"><a-icon type="minus" /></span>
+                    <span v-if="item.dataIndex == '1'" style="margin-left: 150px"></span>
+                    <span v-if="item.dataIndex == '2'" style="margin-left: 100px; margin-right: -15px"
+                      >中信证券1期</span
+                    >
+                    <span style="margin-left: 155px"><a-icon type="minus" /></span>
                   </div>
                 </template>
               </a-tree>
@@ -78,7 +94,12 @@
             <div>
               <a-row :gutter="14">
                 <a-col :span="18">
-                  <a-form-model-item style="margin-top: -10px" label="查找内容" :label-col="{ span: 5 }" :wrapper-col="{ span: 19 }">
+                  <a-form-model-item
+                    style="margin-top: -10px"
+                    label="查找内容"
+                    :label-col="{ span: 5 }"
+                    :wrapper-col="{ span: 19 }"
+                  >
                     <a-input v-model="formData.customName"></a-input>
                   </a-form-model-item>
                 </a-col>
@@ -100,7 +121,9 @@
           <!-- 提交按钮区域 -->
           <div style="margin-top: 10px">
             <a-button style="float: right; margin-left: 10px" size="small" type="primary"> 取消 </a-button>
-            <a-button style="float: right; margin-left: 10px" size="small" type="primary" :loading="loading"> 提交 </a-button>
+            <a-button style="float: right; margin-left: 10px" size="small" type="primary" :loading="loading">
+              提交
+            </a-button>
           </div>
         </a-col>
       </a-row>
@@ -191,6 +214,7 @@ export default {
           dataIndex: 'type',
         },
       ],
+      headers:{authorization: 'authorization-text',} //上传文件
     }
   },
   mounted() {
@@ -208,51 +232,17 @@ export default {
     onCheckBoxChange(e) {
       console.log(`checked = ${e.target.checked}`)
     },
-    onHandEidtBranchOffice(e) {
-      console.log(e)
-    },
-    // 树型结构
-    // onSelect(keys, event) {
-    //   console.log('Trigger Select', keys, event)
-    // },
-    // onExpand() {
-    //   console.log('Trigger Expand')
-    // },
-    // onSelect(selectedKeys, info) {
-    //   console.log('selected', selectedKeys, info)
-    // },
-    // onCheck(checkedKeys, info) {
-    //   console.log('onCheck', checkedKeys, info)
-    // },
-    // 递归查找
-    // searchOption (option, arr, type = 'delect') {
-    //   console.log(option, arr)
-    //   for (let s = 0; s < arr.length; s++) {
-    //     console.log(arr[s].key, option.key)
-    //     if (arr[s].key === option.key) {
-    //       if (type === 'delect') {
-    //         arr.splice(s, 1)
-    //       } else {
-    //       //这是模拟数据编辑数据
-    //         this.$set(arr, s, {
-    //           title: '12121212',
-    //           key: '12121212',
-    //           scopedSlots: { title: 'custom' }
-    //         })
-    //       }
-    //       break
-    //     } else if (arr[s].children && arr[s].children.length > 0) { // 递归条件
-    //       this.searchOption(option, arr[s].children)
-    //     } else {
-    //       continue
-    //     }
-    //   }
-    // },
-
-    // remove (data) {
-    // 	//先请求后端接口，删除成功后执行
-    //   this.searchOption(data, this.treeData)
-    // },
+    handleChange(info) {
+      console.log(info);
+      if (info.file.status !== 'uploading') {
+        console.log(info.file, info.fileList);
+      }
+      if (info.file.status === 'done') {
+        this.$message.success(`${info.file.name} 文件上传成功`);
+      } else if (info.file.status === 'error') {
+        this.$message.error(`${info.file.name} 文件上传失败`);
+      }
+    }
   },
 }
 </script>
