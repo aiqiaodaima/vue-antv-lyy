@@ -7,13 +7,13 @@
           <div style="border-bottom: 1px solid #ddd; margin-top: 10px">
             <a-form-model ref="ruleForm" :model="formData" :label-col="labelCol" :wrapper-col="wrapperCol">
               <a-form-model-item label="指令来源">
-                <a-select v-model="formData.source" />
+                <a-select v-model="formData.caseChannel" />
               </a-form-model-item>
               <a-form-model-item label="指令类型">
-                <a-select v-model="formData.type" />
+                <a-select v-model="formData.caseTypeCode" />
               </a-form-model-item>
               <a-form-model-item label="业务类型">
-                <a-select v-model="formData.bussinessType" />
+                <a-select v-model="formData.busiTypeCode" />
               </a-form-model-item>
               <a-form-model-item label="项目名称">
                 <a-row :gutter="14">
@@ -24,7 +24,7 @@
                 </a-row>
               </a-form-model-item>
               <a-form-model-item label="客户名称">
-                <a-select v-model="formData.customName" />
+                <a-select v-model="formData.custmName" />
               </a-form-model-item>
             </a-form-model>
           </div>
@@ -32,7 +32,7 @@
             <a-form-model ref="ruleForm" :model="formData" :label-col="labelCol" :wrapper-col="wrapperCol">
             <a-form-model-item label="划款日期">
               <a-date-picker
-                v-model="formData.transferMoney"
+                v-model="formData.totalAmt"
                 show-time
                 type="date"
                 placeholder="请选择时间"
