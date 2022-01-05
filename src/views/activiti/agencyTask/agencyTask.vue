@@ -235,6 +235,7 @@ import SuspendedTasks from "./modules/suspendedTasks.vue";
 import locale from "ant-design-vue/es/date-picker/locale/zh_CN";
 import moment from "moment";
 import { LeadingtekListMixin } from '@/mixins/LeadingtekListMixin'
+import { postAction } from "@/api/manage";
 import Vue from 'vue'
 
 
@@ -294,6 +295,40 @@ export default {
       console.log(dateString[0],dateString[1]);
       this.filterData.time_begin = dateString[0];
       this.filterData.time_end = dateString[1];
+    },
+    //获取查询条件
+    getQueryParams() {
+      var param = {
+        queryType: this.queryType,
+        sortDatas: this.sortDatas,
+        filterData: this.filterData,
+        pageData: this.pageData
+      };
+      return filterObj(param);
+    },
+    loadData(arg) {
+      if (!this.url.list) {
+        this.$message.error("请设置url.list属性!");
+        return;
+      }
+      //加载数据 若传入参数1则加载第一页的内容
+      if (arg === 1) {
+        this.ipagination.current = 1;
+        this.pageData.page = 0;
+      }
+      var params = this.getQueryParams(); //查询条件
+      this.loading = true;
+      postAction(this.url.list, params)
+        .then(res => {
+          if (res.ret == 0) {
+            this.dataSource = res.data.content;
+            this.ipagination.total = res.data.totalElements;
+          }
+          this.loading = false;
+        })
+        .finally(() => {
+          this.loading = false;
+        });
     },
   },
 };
