@@ -129,7 +129,15 @@
               </a-select>
             </a-form-model-item>
             <a-form-model-item label="金额" prop="amount">
-              <a-input v-model="formData.amount" placeholder="请输入金额" allowClear></a-input>
+              <a-input-number
+                style="width: 100%"
+                v-model="formData.amount"
+                placeholder="请输入金额"
+                :precision="4"
+                :min="0"
+                :max="20"
+                allowClear>
+              </a-input-number>
             </a-form-model-item>
             <a-form-model-item label="大写金额" prop="capitalAmount">
               <a-input v-model="formData.capitalAmount" placeholder="请输入大写金额" allowClear />
