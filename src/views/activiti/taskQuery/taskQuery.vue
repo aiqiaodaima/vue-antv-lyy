@@ -1,4 +1,5 @@
 <template>
+<!-- 任务查询页面 -->
   <a-card :bordered="false">
     <!-- 查询区域 -->
         <!-- 表单区域 -->
@@ -14,10 +15,10 @@
               label="指令编号"
               :label-col="{ span: 6 }"
               :wrapper-col="{ span: 18 }"
-              prop="id"
+              prop="caseNo"
             >
               <a-input
-                v-model="filterData.id"
+                v-model="filterData.caseNo"
                 placeholder="请输入指令编号"
                 allowClear
               >
@@ -29,10 +30,10 @@
               label="客户名称"
               :label-col="{ span: 6 }"
               :wrapper-col="{ span: 18 }"
-              prop="cusName"
+              prop="customerName"
             >
               <a-input
-                v-model="filterData.cusName"
+                v-model="filterData.customerName"
                 placeholder="请输入客户名称"
                 allowClear
               >
@@ -44,10 +45,10 @@
               label="项目名称"
               :label-col="{ span: 6 }"
               :wrapper-col="{ span: 18 }"
-              prop="proName"
+              prop="projectName"
             >
               <a-input
-                v-model="filterData.proName"
+                v-model="filterData.projectName"
                 placeholder="请输入项目名称"
                 allowClear
               >
@@ -59,13 +60,18 @@
               label="指令类型"
               :label-col="{ span: 6 }"
               :wrapper-col="{ span: 18 }"
-              prop="type"
+              prop="caseType"
             >
               <a-select
-                v-model="filterData.type"
+                v-model="filterData.caseType"
                 placeholder="请选择指令类型"
                 allowClear
               >
+              <a-select-option
+              v-for="item in typeList"
+              :key="item.index"
+              :value="item"
+              >{{item}}</a-select-option>
               </a-select>
             </a-form-model-item>
           </a-col>
@@ -76,13 +82,15 @@
               label="业务类型"
               :label-col="{ span: 6 }"
               :wrapper-col="{ span: 18 }"
-              prop="type"
+              prop="businessType"
             >
               <a-select
-                v-model="filterData.type"
+                v-model="filterData.businessType"
                 placeholder="请选择业务类型"
                 allowClear
               >
+              <a-select-option key="1" :value="1">指令平台经办-划款指令</a-select-option>
+              <a-select-option key="2" :value="2">柜面经办-划款指令</a-select-option>
               </a-select>
             </a-form-model-item>
           </a-col>
@@ -91,13 +99,18 @@
               label="指令渠道"
               :label-col="{ span: 6 }"
               :wrapper-col="{ span: 18 }"
-              prop="cusName"
+              prop="caseChannel"
             >
               <a-select
-                v-model="filterData.cusName"
+                v-model="filterData.caseChannel"
                 placeholder="指令渠道"
                 allowClear
               >
+              <a-select-option
+              v-for="item in channelList"
+              :key="item.index"
+              :value="item"
+              >{{item}}</a-select-option>
               </a-select>
             </a-form-model-item>
           </a-col>
@@ -106,10 +119,10 @@
               label="发起时间"
               :label-col="{ span: 6 }"
               :wrapper-col="{ span: 18 }"
-              prop="startTime"
+              prop="time"
             >
               <a-range-picker
-                v-model="filterData.startTime"
+                v-model="filterData.time"
                 format="YYYY-MM-DD"
                 :placeholder="['开始时间', '结束时间']"
                 @change="onChange" />
@@ -120,13 +133,18 @@
               label="流程环节"
               :label-col="{ span: 6 }"
               :wrapper-col="{ span: 18 }"
-              prop="type"
+              prop="procedureLink"
             >
               <a-select
-                v-model="filterData.type"
+                v-model="filterData.procedureLink"
                 placeholder="请选择流程环节"
                 allowClear
               >
+              <a-select-option
+              v-for="item in procedureLinkList"
+              :key="item.index"
+              :value="item"
+              >{{item}}</a-select-option>
               </a-select>
             </a-form-model-item>
           </a-col>
@@ -134,20 +152,20 @@
         <a-row :gutter="24">
           <a-col :span="6">
             <a-form-model-item
-              label="估值负责人"
+              label="业务处理人"
               :label-col="{ span: 7 }"
               :wrapper-col="{ span: 17 }"
-              prop="type"
+              prop="taskCurrentHandler"
             >
               <a-input
-                v-model="filterData.type"
-                placeholder="请输入估值负责人"
+                v-model="filterData.taskCurrentHandler"
+                placeholder="请输入业务处理人"
                 allowClear
               >
               </a-input>
             </a-form-model-item>
           </a-col>
-          <a-col :span="6">
+          <!-- <a-col :span="6">
             <a-form-model-item
               label="划款时间"
               :label-col="{ span: 6 }"
@@ -160,16 +178,16 @@
                   :placeholder="['开始时间', '结束时间']"
                   @change="onChangeTime" />
             </a-form-model-item>
-          </a-col>
+          </a-col> -->
           <a-col :span="6">
             <a-form-model-item
               label="划款金额"
               :label-col="{ span: 6 }"
               :wrapper-col="{ span: 18 }"
-              prop="proName"
+              prop="transferAmt"
             >
               <a-input
-                v-model="filterData.proName"
+                v-model="filterData.transferAmt"
                 placeholder="请输入划款金额"
                 allowClear
               >
@@ -231,6 +249,15 @@ export default {
       moment,
       filterData: {},
       dataSource: [],
+      // 指令类型列表
+      typeList: ['投资款-中登清算','投资款-银行间','投资款-行内结构性存款','投资款-场外','投资款-行内定期存款','投资款-银转证',
+      '投资款-行内理财申购','回款-行内理财赎回','回款-行内基金赎回','提取-收益分配','费用-托管费','费用-管理费','费用-中登开户费',
+      '费用-其他费用','调拨-银行间中债','调拨-银行间','费用-银行间','到期-中登清算','配置-同名划转'
+      ],
+      // 指令渠道列表
+      channelList: ['传真','邮件','易托管影像','易托管电子','绿色通道','新建','主动支付','托管直连'],
+      // 流程环节列表
+      procedureLinkList:['指令经办','指令录入1','指令录入2','绿色通道录入','审批1','审批2','审批3','用印经办','用印复核','用印审批','指令客服'],
     };
   },
   created() {},
@@ -259,16 +286,10 @@ export default {
       // this.loadData(1)
     },
     // 发起时间
-    onChange(value, dateString){
+    onChange(value, dateString) {
       console.log(dateString[0],dateString[1]);
-      this.filterData.startTime_begin = dateString[0];
-      this.filterData.startTime_end = dateString[1];
-    },
-    // 划款时间
-    onChangeTime(value, dateString) {
-      console.log(dateString[0],dateString[1]);
-      this.filterData.time_begin = dateString[0];
-      this.filterData.time_end = dateString[1];
+      this.filterData.beginLaunchDate = dateString[0];
+      this.filterData.endLaunchDate = dateString[1];
     },
   },
 };

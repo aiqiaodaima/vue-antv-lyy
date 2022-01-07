@@ -114,7 +114,6 @@
     </a-row>
     <!-- 底部 -->
       <a-row>
-        <a-col>
           <a-form-modal ref="ruleForm" :model="formData" :label-col="labelCol" :wrapper-col="wrapperCol">
             <a-form-modal-item>
                <a-button style="float: right; margin-left: 10px" type="primary" @click="handleCancel"> 清空 </a-button>
