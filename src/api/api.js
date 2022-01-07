@@ -92,6 +92,8 @@ const checkRuleByCode = (params) => getAction('/sys/checkRule/checkByCode', para
 //加载我的通告信息
 const getUserNoticeInfo= (params)=>getAction("/sys/sysAnnouncementSend/getMyAnnouncementSend",params);
 const getTransitURL = url => `/sys/common/transitRESTful?url=${encodeURIComponent(url)}`
+//单笔指令
+const singleCase = (params) => postAction('/single_case/save', params);
 // 中转HTTP请求
 export const transitRESTful = {
   get: (url, parameter) => getAction(getTransitURL(url), parameter),
@@ -157,7 +159,9 @@ export {
   saveDeptRolePermission,
   queryMyDepartTreeList,
   getUserNoticeInfo,
-  getDictItemsFromCache
+  getDictItemsFromCache,
+  // 指令系统的接口
+  singleCase,
 }
 
 
