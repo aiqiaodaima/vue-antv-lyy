@@ -36,8 +36,11 @@
                   v-model="formData.bizTypeCode"
                   placeholder="请输入业务类型"
                   allowClear>
-                  <a-select-option key="1" :value="1">指令平台经办-划款指令</a-select-option>
-                  <a-select-option key="2" :value="2">柜面经办-划款指令</a-select-option>
+                  <a-select-option
+                  v-for="item in businessTypeList"
+                  :key="item.index"
+                  :value='{a:item, b:bizTypeName}'
+                  >{{ item}}</a-select-option>
                 </a-select>
               </a-form-model-item>
               <a-form-model-item label="项目名称" prop="projectName">
@@ -48,7 +51,7 @@
                       placeholder="请输入项目名称"
                       allowClear/>
                   </a-col>
-                  <a-col :span="1"><a-button style="right" type="primary">查询项目</a-button></a-col>
+                  <a-col :span="1"><a-button style="right" type="primary" @click="searchProject">查询项目</a-button></a-col>
                 </a-row>
               </a-form-model-item>
               <a-form-model-item label="客户名称" prop="customerName">
@@ -196,13 +199,19 @@ export default {
       ],
       // 币种列表
       currencyList: ['人民币','美元','港元','日元','欧元','英镑','瑞郎','加元','澳元','新加坡元'],
+      // 业务类型
+      businessTypeList: ['指令平台经办-划款指令','柜面经办-划款指令'],
+      //业务名称
+      bizTypeName:'',
       // 用途列表
       payPurposeList:['投资款','收益分配','到期提取本金及收益','基金申购款','基金赎回款','基金轧差款','管理费','托管费','销售服务费',
       '委贷手续费','财务顾问费','审计费','律师费','税款','销户尾款','其他费用','到期提取','投资顾问费','客户服务费','佣金','银转期',
       '期转银','风险准备金','其他转账','自定义'],
       labelCol: { span: 6 },
       wrapperCol: { span: 14 },
-      formData: {},
+      formData: {
+        bizTypeCode:'',//业务类型
+      },
     }
   },
   methods: {
