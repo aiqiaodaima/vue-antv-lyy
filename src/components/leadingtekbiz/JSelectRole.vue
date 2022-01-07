@@ -8,6 +8,7 @@
     :returnKeys="returnKeys"
     :listUrl="url.list"
     :columns="columns"
+    :return-id="true"
     queryParamText="角色编码"
 
     v-on="$listeners"

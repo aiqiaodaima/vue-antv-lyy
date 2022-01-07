@@ -100,7 +100,7 @@ module.exports = {
         changeOrigin: true
       },
       '/leadingtek-boot-dev/': {
-        target: 'http://localhost:8080',
+        target: 'http://localhost:9000',
         ws: true,
         logLevel: 'debug',
         changeOrigin: true

@@ -97,6 +97,7 @@
     },
     methods: {
       initComp(textVals) {
+        console.log('initComp',textVals)
         this.textVals = textVals
       },
       //返回选中的用户信息
@@ -128,6 +129,7 @@
           let temp1 = []
           let temp2 = []
           for (let item of rows) {
+            console.log('item',item)
             temp1.push(item[this.storeField])
             temp2.push(item[this.textField])
           }

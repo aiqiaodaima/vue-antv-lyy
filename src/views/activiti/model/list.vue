@@ -152,7 +152,7 @@
 
 <script>
 import { LeadingtekListMixin } from '@/mixins/LeadingtekListMixin'
-import { postAction, deleteAction, getAction } from '@/api/manage'
+import { postAction, deleteAction, getAction } from '@api/manage'
 import store from '@/store'
 
 export default {
@@ -172,7 +172,7 @@ export default {
       .then((e) => {
         console.log(e)
         if (e.success) {
-          this.createObj.caseSource = e.result
+          this.createObj.caseType = e.result
         }
       })
 
@@ -313,17 +313,6 @@ export default {
             return value === null ? '未部署' : '已经部署'
           }
         },
-        // {
-        //   title: '创建时间', width: 150,
-        //   dataIndex: 'createTime',
-        //   align: 'center'
-        //   // sorter:true
-        // },
-        // {
-        //   title: '最后更新时间', width: 150,
-        //   dataIndex: 'lastUpdateTime',
-        //   align: 'center'
-        // },
         {
           title: '操作', width: 250,
           dataIndex: '',
@@ -404,7 +393,12 @@ export default {
         .then(() => {
           _this.createObj.confirmLoading = true
           _this.modelId = id
-          _this.key = new Date().getTime()
+          getAction('/activiti/model/diagram?modelId='+id)
+          .then(({message})=>{
+            this.modeler.xmlData = message
+            console.log('modeler',this.modeler)
+          })
+          // _this.key = new Date().getTime()
           _this.updateObj.visible = true
           _this.createObj.confirmLoading = false
         })
@@ -434,7 +428,7 @@ export default {
         .then(response => {
           console.log(response)
           if (response.success) {
-            this.$message.success('保护署成功')
+            this.$message.success('部署成功')
           } else {
             this.$message.error('部署失败')
           }

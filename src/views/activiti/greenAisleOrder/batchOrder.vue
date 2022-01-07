@@ -95,7 +95,7 @@
             <a-button class="ant-alert ant-alert-info" style="margin-left: 8px">全部删除</a-button>
             <a-button class="ant-alert ant-alert-info" style="margin-left: 8px">忽略验证</a-button>
             <a-button class="ant-alert ant-alert-info" style="margin-left: 8px">导出</a-button>
-          </a-form-model-item>  
+          </a-form-model-item>
         </a-form-model>
         <a-table
         ref="table"
@@ -121,6 +121,7 @@
                <a-button style="float: right; margin-left: 10px" type="primary" :loading="loading" @click="handleOk"> 提交 </a-button>
             </a-form-modal-item>
           </a-form-modal>
+        </a-col>
       </a-row>
     </a-card>
   </div>
