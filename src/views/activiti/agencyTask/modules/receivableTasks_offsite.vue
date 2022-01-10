@@ -238,8 +238,9 @@ export default {
       this.filterData.time_end = dateString[1]
     },
     // 详情
-    detail() {
+    detail(row) {
       this.$refs.detailModal.visible = true
+      this.$refs.detailModal.caseNo = row.caseNo
       this.$refs.detailModal.title = '详情'
     },
     // 流程图
