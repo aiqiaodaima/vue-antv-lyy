@@ -5,35 +5,46 @@
       <a-form-model ref="ruleForm" :model="filterData" @submit.prevent="searchQuery">
         <a-row :gutter="24">
           <a-col :span="6">
-            <a-form-model-item label="指令编号" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }">
+            <a-form-model-item label="指令编号" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }" prop="caseNo">
               <a-input v-model="filterData.caseNo" placeholder="请输入指令编号" allowClear> </a-input>
             </a-form-model-item>
           </a-col>
           <a-col :span="6">
-            <a-form-model-item label="客户名称" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }" prop="cusName">
+            <a-form-model-item
+              label="客户名称"
+              :label-col="{ span: 6 }"
+              :wrapper-col="{ span: 18 }"
+              prop="customerName"
+            >
               <a-input v-model="filterData.customerName" placeholder="请输入客户名称" allowClear> </a-input>
             </a-form-model-item>
           </a-col>
           <a-col :span="6">
-            <a-form-model-item label="项目名称" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }" prop="proName">
+            <a-form-model-item label="项目名称" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }" prop="projectName">
               <a-input v-model="filterData.projectName" placeholder="请输入项目名称" allowClear> </a-input>
             </a-form-model-item>
           </a-col>
           <a-col :span="6">
-            <a-form-model-item label="指令类型" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }" prop="type">
-              <a-select v-model="filterData.caseType" placeholder="请选择指令类型" allowClear> </a-select>
+            <a-form-model-item label="指令类型" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }" prop="caseType">
+              <a-select v-model="filterData.caseType" placeholder="请选择指令类型" allowClear>
+                <a-select-option v-for="v in caseType" :key="v.value">{{ v.text }}</a-select-option>
+              </a-select>
             </a-form-model-item>
           </a-col>
         </a-row>
         <a-row :gutter="24">
           <a-col :span="6">
-            <a-form-model-item label="业务类型" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }" prop="type">
-              <a-select v-model="filterData.bizTypeName" placeholder="请选择业务类型" allowClear> </a-select>
+            <a-form-model-item label="业务类型" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }" prop="bizTypeName">
+              <a-select v-model="filterData.bizTypeName" placeholder="请选择业务类型" allowClear>
+                <a-select-option v-for="v in bizTypeCode" :key="v.value">{{ v.text }}</a-select-option>
+              </a-select>
             </a-form-model-item>
           </a-col>
           <a-col :span="6">
-            <a-form-model-item label="指令渠道" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }" prop="cusName">
-              <a-select v-model="filterData.channel" placeholder="指令渠道" allowClear> </a-select>
+            <a-form-model-item label="指令渠道" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }" prop="channel">
+              <a-select v-model="filterData.channel" placeholder="指令渠道" allowClear>
+                <a-select-option v-for="v in channel" :key="v.value">{{ v.text }}</a-select-option>
+              </a-select>
             </a-form-model-item>
           </a-col>
           <a-col :span="6">
@@ -47,14 +58,24 @@
             </a-form-model-item>
           </a-col>
           <a-col :span="6">
-            <a-form-model-item label="流程环节" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }" prop="type">
+            <a-form-model-item
+              label="流程环节"
+              :label-col="{ span: 6 }"
+              :wrapper-col="{ span: 18 }"
+              prop="procedureLink"
+            >
               <a-select v-model="filterData.procedureLink" placeholder="请选择流程环节" allowClear> </a-select>
             </a-form-model-item>
           </a-col>
         </a-row>
         <a-row :gutter="24">
           <a-col :span="6">
-            <a-form-model-item label="估值负责人" :label-col="{ span: 7 }" :wrapper-col="{ span: 17 }" prop="type">
+            <a-form-model-item
+              label="估值负责人"
+              :label-col="{ span: 7 }"
+              :wrapper-col="{ span: 17 }"
+              prop="valuationUser"
+            >
               <a-input v-model="filterData.valuationUser" placeholder="请输入估值负责人" allowClear> </a-input>
             </a-form-model-item>
           </a-col>
@@ -69,7 +90,7 @@
             </a-form-model-item>
           </a-col>
           <a-col :span="6">
-            <a-form-model-item label="划款金额" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }" prop="proName">
+            <a-form-model-item label="划款金额" :label-col="{ span: 6 }" :wrapper-col="{ span: 18 }" prop="transferAmt">
               <a-input v-model="filterData.transferAmt" placeholder="请输入划款金额" allowClear> </a-input>
             </a-form-model-item>
           </a-col>
@@ -85,9 +106,9 @@
     </div>
     <!-- 查询区域 -->
     <div>
-      <a-tabs default-active-key="1" @change="changeTab">
+      <a-tabs default-active-key="1" :activeKey="activeKey" @change="changeTab">
         <a-tab-pane key="1" tab="场外清算可领取任务">
-          <ReceivableTasksOffsite ref="receivableTasksOffsite" />
+          <ReceivableTasksOffsite @receiveTesk="changeTab('5')" ref="receivableTasksOffsite" />
         </a-tab-pane>
         <a-tab-pane key="2" tab="场内清算可领取任务">
           <ReceivableTasksOffsite ref="receivableTasksInside" />
@@ -101,11 +122,11 @@
         <!-- 已领用任务 -->
         <a-tab-pane key="5">
           <span slot="tab">已领用任务<a-badge :count="count" style="top: -10px" /></span>
-          <ReclaimedTasks ref="reclaimedTasks" />
+          <ReceivableTasksOffsite ref="reclaimedTasks" />
         </a-tab-pane>
         <a-tab-pane key="6">
           <span slot="tab">挂起任务<a-badge :count="count1" style="top: -10px" /></span>
-          <SuspendedTasks ref="suspendedTasks" />
+          <ReceivableTasksOffsite ref="suspendedTasks" />
         </a-tab-pane>
       </a-tabs>
     </div>
@@ -114,23 +135,19 @@
 
 <script>
 import ReceivableTasksOffsite from './modules/receivableTasks_offsite.vue'
-
-import ReclaimedTasks from './modules/reclaimedTasks.vue'
-import SuspendedTasks from './modules/suspendedTasks.vue'
 import locale from 'ant-design-vue/es/date-picker/locale/zh_CN'
 import moment from 'moment'
+import store from '@/store'
 
 export default {
   components: {
     ReceivableTasksOffsite,
-    ReclaimedTasks,
-    SuspendedTasks,
   },
   data() {
     return {
       count: 3,
       count1: 1,
-      TransferDate: [], // 发起时间
+      TransferDate: [], // 划款时间
       LaunchDate: [], // 开始时间
       show: true,
       locale,
@@ -138,10 +155,34 @@ export default {
       loading: false,
       filterData: {},
       activeKey: '1',
+      channel: [], //指令来源
+      caseType: [], //指令类型
+      bizTypeCode: [], //业务类型
+      url: {
+        dict: '/sys/dict/getDictItems/', //码表接口地址
+      },
     }
   },
+  created: function () {
+    // store.dispatch('updateCaseChannel', this.url.dict + 'case_source').then((e) => {
+    //   console.log(e)
+    //   if (e.success) {
+    //     this.channel = e.result
+    //   }
+    // })
+    // store.dispatch('updateCaseType', this.url.dict + 'case_type').then((e) => {
+    //   console.log(e)
+    //   if (e.success) {
+    //     this.caseType = e.result
+    //   }
+    // })
 
-  created() {
+    // store.dispatch('updateCaseBusinessType', this.url.dict + 'case_business_type').then((e) => {
+    //   console.log(e)
+    //   if (e.success) {
+    //     this.bizTypeCode = e.result
+    //   }
+    // })
     this.changeTab('1')
   },
   mounted() {},
@@ -162,8 +203,11 @@ export default {
     // 重置
     searchReset() {
       this.filterData = {}
+      this.TransferDate = []
+      this.LaunchDate = []
       this.selectedRowKeys = []
       this.selectionRows = []
+      this.dataSource = []
       this.$refs.ruleForm.resetFields()
     },
     // 发起时间
@@ -181,18 +225,23 @@ export default {
     },
     // 改变Tab
     changeTab(key) {
+      console.log(key)
       let keyObj = {
         1: 'receivableTasksOffsite',
         2: 'receivableTasksInside',
         3: 'receivableTasksNoTransPayment',
         4: 'receivableTaskComResolve',
+        5: 'reclaimedTasks',
+        6: 'suspendedTasks',
       }
-      this.activeKey = key
+      this.activeKey = String(key)
       switch (key) {
         case '1':
         case '2':
         case '3':
         case '4':
+        case '5':
+        case '6':
           this.$nextTick(() => {
             this.$refs[keyObj[key]].activeKey = key
             this.$refs[keyObj[key]].filterData = this.filterData
@@ -208,4 +257,3 @@ export default {
 </script>
 <style scoped>
 </style>
-

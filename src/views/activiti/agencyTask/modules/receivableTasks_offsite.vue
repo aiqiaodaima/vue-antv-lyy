@@ -6,8 +6,6 @@
       <a-button class="ant-alert ant-alert-info" style="margin-bottom: 8px" icon="profile" @click="getTesk"
         >领取任务</a-button
       >
-      <a-button class="ant-alert ant-alert-info" style="margin-left: 8px" @click="example"> 例子1 </a-button>
-      <a-button class="ant-alert ant-alert-info" style="margin-left: 8px" @click="sealExample"> 用印经办例子 </a-button>
     </div>
     <a-table
       ref="table"
@@ -66,12 +64,7 @@ import detailModal from './detailModal.vue'
 import processModal from './processModal.vue'
 import { postAction, getAction } from '@/api/manage'
 import { filterObj } from '@/utils/util'
-
-const dataSource = [
-  { rowIndex: '1', name: '指令1', punchTime: '划款' },
-  { rowIndex: '2', name: '指令2', punchTime: 'xianjin' },
-  { rowIndex: '3', name: '指令3', punchTime: '支付宝' },
-]
+import { message } from 'ant-design-vue'
 
 export default {
   components: { getTaskModal, detailModal, processModal },
@@ -81,7 +74,6 @@ export default {
       moment,
       loading: false,
       filterData: {},
-      // dataSource: dataSource,
       dataSource: [],
       selectedRowKeys: [],
       selectionRows: [],
@@ -164,6 +156,21 @@ export default {
           dataIndex: 'launchDate',
         },
         {
+          title: '当前处理',
+          align: 'center',
+          dataIndex: 'status',
+        },
+        {
+          title: '用印方式',
+          align: 'center',
+          dataIndex: 'useTheWay',
+        },
+        {
+          title: '估值负责人',
+          align: 'center',
+          dataIndex: 'valuationUser',
+        },
+        {
           title: '操作',
           dataIndex: 'action',
           align: 'center',
@@ -202,28 +209,9 @@ export default {
   mounted() {},
   computed: {},
   methods: {
-    // 查询
-    searchQuery() {
-      console.log(this.filterData)
-      this.$refs.ruleForm.validate((valid) => {
-        if (valid) {
-          // this.loadData(1);
-        } else {
-          console.log('error submit!')
-          return false
-        }
-      })
-    },
-    // 重置
-    searchReset() {
-      this.filterData = {}
-      this.selectedRowKeys = []
-      this.selectionRows = []
-      this.$refs.ruleForm.resetFields()
-    },
     // 刷新重置
     refreshList() {
-      // this.loadData(1);
+      this.loadData(1)
     },
     // 发起时间
     onChange(value, dateString) {
@@ -263,6 +251,8 @@ export default {
               if (code === 200) {
                 resolve('成功了')
                 // TODO 领取任务成功
+                // this.changeTab('5')
+                this.$emit('receiveTesk')
                 // this.dataSource = res.data.content
                 // this.ipagination.total = res.data.totalElements
               } else {
@@ -275,10 +265,12 @@ export default {
       Promise.all(promiseArr)
         .then((result) => {
           console.log(result)
-          this.$message.success('任务领取成功')
+          this.$message.success('领取任务成功')
+          this.loadData()
         })
         .catch((error) => {
           console.log(error) // 失败了，打出 '失败'
+          this.$message.warning('该任务已被领用')
         })
         .finally(() => {
           this.loading = false
@@ -302,14 +294,7 @@ export default {
       this.ipagination = pagination
       this.loadData()
     },
-    // 例子
-    example() {
-      console.log(222)
-    },
-    // 使用印章例子
-    sealExample() {
-      console.log(111)
-    },
+
     //列设置更改事件
     onColSettingsChange(checkedValues) {
       var key = this.$route.name + ':colsettings'
@@ -367,11 +352,6 @@ export default {
       return filterObj(param)
     },
     loadData(arg) {
-      this.dataSource = [
-        { rowIndex: '1', caseNo: `指令${this.activeKey}`, channel: '划款' },
-        { rowIndex: '2', caseNo: '指令2', channel: 'xianjin' },
-        { rowIndex: '3', caseNo: '指令3', channel: '支付宝' },
-      ]
       if (!this.url.list) {
         this.$message.error('请设置url.list属性!')
         return
@@ -383,11 +363,14 @@ export default {
       }
       var params = this.getQueryParams() //查询条件
       this.loading = true
-      postAction(this.url.list, params)
+      postAction(`${this.url.list}?size=${this.pagination.pageSize}&page=${this.pagination.current}`, {
+        ...this.filterData,
+        queryType: this.activeKey,
+      })
         .then((res) => {
-          if (res.ret == 0) {
-            this.dataSource = res.data.content
-            this.ipagination.total = res.data.totalElements
+          if (res.code === 200) {
+            this.dataSource = res.result.records
+            // this.pagination.total = res.result.records.total
           }
           this.loading = false
         })

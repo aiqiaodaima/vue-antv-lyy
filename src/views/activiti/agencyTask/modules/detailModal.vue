@@ -6,51 +6,68 @@
       :confirm-loading="confirmLoading"
       :maskClosable="false"
       width="80%"
+      :centered="true"
       :loading="loading"
       @cancel="handleCancel"
     >
       <template slot="footer">
+        <a-button @click="cancleTask">取消领用</a-button>
         <a-button @click="handleCancel">取消</a-button>
         <a-button type="primary" :loading="loading" @click="handleOk"> 确定 </a-button>
       </template>
       <a-tabs type="card" @change="changeTab">
         <a-tab-pane key="1" tab="指令信息">
           <a-form-model :model="formData" ref="ruleForm" :rules="rules">
-            <a-row :gutter="24">
-              <a-col :span="24" v-for="item in infoArr" :key="item.key">
-                <a-form-model-item
-                  :label="item.label"
-                  :prop="item.key"
-                  :label-col="{ span: 3 }"
-                  :wrapper-col="{ span: item.type === 'divider' ? 24 : 15 }"
-                >
-                  <a-input
-                    v-if="item.type === 'text'"
-                    :disabled="item.type === 'text' || pageType === 'view'"
-                    v-model="formData[item.key]"
-                    allowClear
-                  ></a-input>
+            <div class="step-1">
+              <a-row :gutter="24" class="contain">
+                <a-col :span="12" class="contain">
+                  <div style="border-right: 1px solid #ddd; width: 100%">
+                    <iframe :src="iframeUrl" frameborder="0" width="100%" height="100%" scrolling="auto" />
+                  </div>
+                </a-col>
+                <a-col :span="12">
+                  <div>
+                    <a-col :span="24" v-for="item in infoArr" :key="item.key">
+                      <a-form-model-item
+                        :label="item.label"
+                        :prop="item.key"
+                        :label-col="{ span: 5 }"
+                        :wrapper-col="{ span: item.type === 'divider' ? 24 : 13 }"
+                      >
+                        <a-input
+                          v-if="item.type === 'text'"
+                          :disabled="item.type === 'text' || pageType === 'view'"
+                          v-model="formData[item.key]"
+                          allowClear
+                        ></a-input>
 
-                  <a-divider v-if="item.type === 'divider'" />
-                  <a-select v-if="item.type === 'select'" :disabled="pageType === 'view'" v-model="formData[item.key]">
-                    <a-select-option v-for="opt in item.option" :value="opt.value" :key="opt.key">
-                      {{ opt.key }}
-                    </a-select-option>
-                  </a-select>
+                        <a-divider v-if="item.type === 'divider'" />
+                        <a-select
+                          v-if="item.type === 'select'"
+                          :disabled="pageType === 'view'"
+                          v-model="formData[item.key]"
+                        >
+                          <a-select-option v-for="opt in item.option" :value="opt.value" :key="opt.key">
+                            {{ opt.key }}
+                          </a-select-option>
+                        </a-select>
 
-                  <a-radio-group v-if="item.type === 'radio'" v-model="formData[item.key]">
-                    <a-radio
-                      v-for="opt in item.option"
-                      :value="opt.value"
-                      :key="opt.key"
-                      :disabled="pageType === 'view'"
-                    >
-                      {{ opt.key }}</a-radio
-                    >
-                  </a-radio-group>
-                </a-form-model-item>
-              </a-col>
-            </a-row>
+                        <a-radio-group v-if="item.type === 'radio'" v-model="formData[item.key]">
+                          <a-radio
+                            v-for="opt in item.option"
+                            :value="opt.value"
+                            :key="opt.key"
+                            :disabled="pageType === 'view'"
+                          >
+                            {{ opt.key }}</a-radio
+                          >
+                        </a-radio-group>
+                      </a-form-model-item>
+                    </a-col>
+                  </div>
+                </a-col>
+              </a-row>
+            </div>
           </a-form-model>
 
           <a-table :columns="columns" :data-source="tableData" size="small" :pagination="false" />
@@ -65,10 +82,9 @@
 <script>
 import moment from 'moment'
 import { getAction } from '@/api/manage'
-// import {
-//   foreginIncomeAndExpecditureAdd,
-//   foreginIncomeAndExpecditureEdit,
-// } from "@/api/api";
+import store from '@/store'
+import { Base64 } from 'js-base64'
+
 export default {
   data() {
     const columns = [
@@ -104,8 +120,9 @@ export default {
       loading: false,
       confirmLoading: false,
       rules: {},
+      iframeUrl: '',
       formData: {
-        channel: 'sss',
+        channel: '',
       },
       infoArr: [
         {
@@ -269,6 +286,9 @@ export default {
       this.getDetail()
     },
   },
+  created() {
+    this.preview_file()
+  },
   methods: {
     moment,
     handleCancel() {
@@ -287,7 +307,6 @@ export default {
             this.formData = result
             this.tableData = result.processPos
           }
-          this.loading = false
         })
         .finally(() => {
           this.loading = false
@@ -300,6 +319,31 @@ export default {
     changeTab(key) {
       console.log(key)
     },
+    // 取消领用
+    cancleTask() {
+      this.loading = true
+      getAction('task/agency/cancel', {
+        caseNo: this.caseNo,
+      })
+        .then(({ success, message }) => {
+          if (success) {
+            this.$message.success('取消成功')
+            this.visible = false
+          } else {
+            this.$message.info(message)
+          }
+        })
+        .finally(() => {
+          this.loading = false
+        })
+    },
+    // 文件预览
+    preview_file() {
+      let previewUrl = 'ftp://10.14.121.48/usr/share/nginx/html/file/3.docx'
+      let url = encodeURIComponent(Base64.encode(previewUrl))
+      console.log(url)
+      this.iframeUrl = '/preview/onlinePreview?url=' + url + '&watermarkTxt=admin'
+    },
   },
 }
 </script>
@@ -307,5 +351,13 @@ export default {
 .bodyStyle {
   height: 100vh;
   width: 1000px;
+}
+.step-1 {
+  ::v-deep .ant-form-item {
+    margin-bottom: 2px;
+  }
+  .contain {
+    display: flex;
+  }
 }
 </style>
